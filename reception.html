@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VITAMIND — Hospital Reception & Staff Desk Portal | Operations & Billing Desk</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- QRCode JS & HTML5 QRCode Decoder Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme reception-pink-theme">
+
+    <!-- GLOBAL DATALISTS FOR RECEPTION PORTAL -->
+    <datalist id="hospitalList">
+        <option value="Rajiv Gandhi Govt General Hospital (RGGGH), Chennai"></option>
+        <option value="Coimbatore Medical College Hospital (CMCH), Coimbatore"></option>
+        <option value="Government Rajaji Hospital (GRH), Madurai"></option>
+        <option value="Stanley Medical College Hospital, Chennai"></option>
+        <option value="Kilpauk Medical College Hospital, Chennai"></option>
+        <option value="Apollo Super Specialty Hospital, Greams Road, Chennai"></option>
+        <option value="Christian Medical College (CMC), Vellore"></option>
+    </datalist>
+
+    <datalist id="staffDesigList">
+        <option value="Reception Counter 1 & OPD Desk"></option>
+        <option value="Patient Walk-In Billing Desk"></option>
+        <option value="CMCHIS Insurance Claims Desk"></option>
+        <option value="Emergency & Ambulance Dispatcher"></option>
+        <option value="Hospital Pharmacy Inventory Staff"></option>
+    </datalist>
+
+    <datalist id="allergyList">
+        <option value="No Known Allergies"></option>
+        <option value="Penicillin Allergy"></option>
+        <option value="Sulfa Drugs Allergy"></option>
+        <option value="Aspirin Allergy"></option>
+        <option value="Cephalosporin Allergy"></option>
+    </datalist>
+
+    <datalist id="districtList">
+        <option value="Ariyalur"></option><option value="Chengalpattu"></option><option value="Chennai"></option>
+        <option value="Coimbatore"></option><option value="Cuddalore"></option><option value="Dharmapuri"></option>
+        <option value="Dindigul"></option><option value="Erode"></option><option value="Kallakurichi"></option>
+        <option value="Kanchipuram"></option><option value="Kanyakumari"></option><option value="Karur"></option>
+        <option value="Krishnagiri"></option><option value="Madurai"></option><option value="Mayiladuthurai"></option>
+        <option value="Nagapattinam"></option><option value="Namakkal"></option><option value="Nilgiris (Ooty)"></option>
+        <option value="Perambalur"></option><option value="Pudukkottai"></option><option value="Ramanathapuram"></option>
+        <option value="Rameswaram"></option><option value="Ranipet"></option><option value="Salem"></option>
+        <option value="Sivaganga"></option><option value="Tenkasi"></option><option value="Thanjavur"></option>
+        <option value="Theni"></option><option value="Thiruvallur"></option><option value="Thiruvarur"></option>
+        <option value="Thoothukudi (Tuticorin)"></option><option value="Tiruchirappalli (Trichy)"></option>
+        <option value="Tirunelveli"></option><option value="Tirupattur"></option><option value="Tiruppur"></option>
+        <option value="Tiruvannamalai"></option><option value="Vellore"></option><option value="Viluppuram"></option>
+        <option value="Virudhunagar"></option>
+    </datalist>
+
+    <datalist id="doctorList">
+        <option value="Dr. E. Theranirajan — Pediatrics"></option>
+        <option value="Dr. S. Rajasekaran — Orthopedics"></option>
+        <option value="Dr. S. Thanikachalam — Cardiology"></option>
+        <option value="Dr. V. Mohan — Diabetology"></option>
+        <option value="Dr. K. Senthil — General Medicine"></option>
+    </datalist>
+
+    <datalist id="discountList">
+        <option value="100% Cashless Covered (CMCHIS Scheme)"></option>
+        <option value="50% Government Subsidy"></option>
+        <option value="0% Regular Private Billing"></option>
+        <option value="25% Senior Citizen Concession"></option>
+    </datalist>
+
+    <!-- RECEPTION & STAFF AUTHENTICATION / ACCOUNT CREATION MODAL -->
+    <div id="receptionLoginModal" class="login-modal-overlay">
+        <div class="login-card shadow-2xl">
+            <div class="login-header">
+                <div class="login-brand-icon" style="background:linear-gradient(135deg, #ec4899, #db2777);"><i class="fa-solid fa-hospital-user" style="color:#fff;"></i></div>
+                <h2 id="recModalTitle">VITAM<span>IND</span> Hospital Reception Portal</h2>
+                <p id="recModalSubtitle">Hospital Staff, Reception Desk & Patient Operations Desk Login</p>
+            </div>
+
+            <!-- LOGIN VIEW -->
+            <div id="receptionLoginView">
+                <div class="auth-tabs">
+                    <button class="auth-tab-btn active" data-recauth="creds"><i class="fa-solid fa-building-user"></i> Hospital Creds</button>
+                    <button class="auth-tab-btn" data-recauth="mobile"><i class="fa-solid fa-mobile-screen-button"></i> Mobile OTP</button>
+                    <button class="auth-tab-btn" data-recauth="aadhaar"><i class="fa-solid fa-id-card"></i> Aadhaar OTP</button>
+                </div>
+
+                <div class="auth-body">
+                    <form id="recCredsForm" class="auth-method-pane active" style="display:flex; flex-direction:column; gap:12px;">
+                        <div class="form-group">
+                            <label>Hospital Name (Select or Type Manually)</label>
+                            <input list="hospitalList" id="recHospitalSelect" placeholder="Select or type hospital name..." value="Rajiv Gandhi Govt General Hospital (RGGGH), Chennai" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Staff Username / Staff ID</label>
+                            <input type="text" id="recUsername" placeholder="e.g. staff.selvi or REC-TN-99201" value="staff.selvi" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="recPassword" placeholder="••••••••" value="staff123" required>
+                        </div>
+
+                        <button type="submit" class="btn success-btn full-width" style="background:linear-gradient(135deg, #ec4899, #db2777); color:#fff;">
+                            <i class="fa-solid fa-lock-open"></i> AUTHENTICATE & OPEN RECEPTION DESK
+                        </button>
+                    </form>
+
+                    <div id="rec-auth-mobile" class="auth-method-pane">
+                        <div class="form-group">
+                            <label>Staff Mobile Phone Number</label>
+                            <div class="input-with-prefix">
+                                <span class="prefix">+91</span>
+                                <input type="tel" id="recMobileInput" placeholder="98765 43210" maxlength="10" value="9876543210">
+                            </div>
+                        </div>
+                        <button class="btn primary-btn full-width" onclick="sendRecOtp('mobile')"><i class="fa-solid fa-paper-plane"></i> SEND 6-DIGIT OTP</button>
+                    </div>
+
+                    <div id="rec-auth-aadhaar" class="auth-method-pane">
+                        <div class="form-group">
+                            <label>Staff Aadhaar Card Number</label>
+                            <input type="text" id="recAadhaarInput" placeholder="1234 - 5678 - 9012" maxlength="14" value="1234 5678 9012">
+                        </div>
+                        <button class="btn primary-btn full-width" onclick="sendRecOtp('aadhaar')"><i class="fa-solid fa-shield-halved"></i> VERIFY WITH UIDAI AADHAAR OTP</button>
+                    </div>
+
+                    <div id="recOtpVerifySection" class="otp-verify-section hidden">
+                        <hr style="border-color:var(--border); margin:14px 0;">
+                        <div class="form-group">
+                            <label style="color:#db2777; font-weight:800;"><i class="fa-solid fa-key"></i> Enter 6-Digit Staff OTP Code (Demo OTP: 123456)</label>
+                            <input type="text" id="recOtpCodeInput" placeholder="Enter 6-digit OTP" maxlength="6" value="123456" style="letter-spacing:6px; font-size:18px; text-align:center; font-weight:800;">
+                        </div>
+                        <button class="btn success-btn full-width" onclick="verifyAndLoginRec()"><i class="fa-solid fa-circle-check"></i> VERIFY OTP & ACCESS RECEPTION DESK</button>
+                    </div>
+                </div>
+
+                <div style="margin-top:16px; text-align:center; border-top:1px solid var(--border); padding-top:14px;">
+                    <p style="font-size:12px; color:var(--text-muted);">New Hospital Staff Member?</p>
+                    <button type="button" class="btn-sm cyan" style="margin-top:6px;" onclick="toggleReceptionAuthMode('register')">
+                        <i class="fa-solid fa-user-plus"></i> CREATE NEW HOSPITAL STAFF ACCOUNT
+                    </button>
+                </div>
+            </div>
+
+            <!-- REGISTER NEW STAFF ACCOUNT VIEW -->
+            <div id="receptionRegisterView" class="hidden">
+                <form id="createNewStaffForm" class="grid-form">
+                    <div class="form-group full-width">
+                        <label>Select Affiliated Hospital (Select or Type Manually)</label>
+                        <input list="hospitalList" id="regStaffHospital" placeholder="Select or type hospital..." value="Rajiv Gandhi Govt General Hospital (RGGGH), Chennai" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Staff Full Name</label>
+                        <input type="text" id="regStaffName" placeholder="M. Selvi" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hospital Employee Staff ID</label>
+                        <input type="text" id="regStaffEmpId" placeholder="REC-TN-99201" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Staff Designation / Counter (Select or Type Manually)</label>
+                        <input list="staffDesigList" id="regStaffDesignation" placeholder="Select or type designation..." value="Reception Counter 1 & OPD Desk" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contact Mobile Phone</label>
+                        <input type="tel" id="regStaffPhone" placeholder="+91 98765 43210" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Preferred Staff Username</label>
+                        <input type="text" id="regStaffUsername" placeholder="staff.selvi" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Create Account Password</label>
+                        <input type="password" id="regStaffPassword" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn success-btn full-width" style="background:linear-gradient(135deg, #ec4899, #db2777); color:#fff;">
+                            <i class="fa-solid fa-user-check"></i> REGISTER STAFF ACCOUNT & LOGIN
+                        </button>
+                    </div>
+                </form>
+
+                <div style="margin-top:14px; text-align:center; border-top:1px solid var(--border); padding-top:12px;">
+                    <p style="font-size:12px; color:var(--text-muted);">Already registered as Staff?</p>
+                    <button type="button" class="btn-sm cyan" style="margin-top:6px;" onclick="toggleReceptionAuthMode('login')">
+                        <i class="fa-solid fa-right-to-bracket"></i> BACK TO STAFF LOGIN
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Top Header -->
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-icon" style="background:linear-gradient(135deg, #ec4899, #db2777); box-shadow:0 0 25px rgba(236, 72, 153, 0.45);">
+                <i class="fa-solid fa-hospital-user" style="color:#fff;"></i>
+            </div>
+            <div>
+                <h1>VITAM<span>IND</span> <span class="state-tag" style="background:rgba(236, 72, 153, 0.15); color:#db2777; border-color:#ec4899;">RECEPTION & STAFF PORTAL</span></h1>
+                <p>Hospital Reception Desk • Walk-In Registration • Billing • Insurance & Ambulances</p>
+            </div>
+        </div>
+
+        <div class="header-status-group">
+            <div class="user-profile-badge" style="border-color:#ec4899;">
+                <i class="fa-solid fa-user-gear" style="color:#db2777;"></i>
+                <span id="recHeaderProfileName">Staff Logged In: <strong>M. Selvi (Reception Counter 1)</strong></span>
+                <button class="logout-sm-btn" onclick="logoutReception()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            </div>
+            <div class="status-badge cmchis" style="border-color:#ec4899; color:#db2777; background:rgba(236,72,153,0.15);"><i class="fa-solid fa-hospital-user"></i> RECEPTION DESK LIVE</div>
+            <div class="clock-display" id="liveClock" style="border-color:#ec4899; color:#db2777;">07 Aug 2026 • 00:00:00</div>
+        </div>
+    </header>
+
+    <!-- REAL-TIME TOAST NOTIFICATION CONTAINER -->
+    <div id="toastNotificationContainer" class="toast-notification-container"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <button class="nav-btn active" data-tab="rec-dashboard">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Desk Dashboard</span>
+        </button>
+
+        <button class="nav-btn tab-with-badge" data-tab="rec-notifications" id="navRecNotifTab">
+            <i class="fa-solid fa-bell"></i>
+            <span>Live Alerts</span>
+            <span class="tab-notif-badge" id="recNotifBadge">5</span>
+        </button>
+
+        <button class="nav-btn" data-tab="rec-qr-scan">
+            <i class="fa-solid fa-qrcode"></i>
+            <span>Scan Token QR</span>
+        </button>
+
+        <button class="nav-btn" data-tab="rec-appointments">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span>Appointments Desk</span>
+        </button>
+
+        <button class="nav-btn" data-tab="rec-billing">
+            <i class="fa-solid fa-calculator"></i>
+            <span>Billing Calculator</span>
+        </button>
+
+        <button class="nav-btn" data-tab="rec-insurance">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <span>Insurance Claims</span>
+        </button>
+
+        <button class="nav-btn" data-tab="rec-pharmacy">
+            <i class="fa-solid fa-pills"></i>
+            <span>Pharmacy Stock</span>
+        </button>
+
+        <button class="nav-btn" data-tab="rec-ambulance">
+            <i class="fa-solid fa-truck-medical"></i>
+            <span>Ambulances Hub</span>
+        </button>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="app-main">
+
+        <!-- TAB 1: DESK DASHBOARD -->
+        <section id="tab-rec-dashboard" class="tab-page active">
+            <div class="metrics-grid">
+                <div class="metric-card primary" style="border-left-color:#ec4899;">
+                    <i class="fa-solid fa-hospital" style="color:#ec4899;"></i>
+                    <div>
+                        <span class="val" id="recHospitalDisplay">RGGGH Chennai</span>
+                        <span class="lbl">RECEPTION DESK STATION</span>
+                    </div>
+                </div>
+
+                <div class="metric-card success">
+                    <i class="fa-solid fa-users"></i>
+                    <div>
+                        <span class="val">142 Walk-Ins</span>
+                        <span class="lbl">TOTAL PATIENTS REGISTERED TODAY</span>
+                    </div>
+                </div>
+
+                <div class="metric-card warning">
+                    <i class="fa-solid fa-qrcode"></i>
+                    <div>
+                        <span class="val">98 QR Tokens Scanned</span>
+                        <span class="lbl">PATIENT QR TOKENS ADMITTED</span>
+                    </div>
+                </div>
+
+                <div class="metric-card info">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    <div>
+                        <span class="val">₹4,85,000</span>
+                        <span class="lbl">CMCHIS CASHLESS CLAIMS PROCESSED</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-status-grid-2col">
+                <div class="status-square-card appointment-status-card" style="border-top-color:#ec4899;">
+                    <div class="square-header">
+                        <div class="sq-icon green" style="background:rgba(236,72,153,0.15); color:#db2777;"><i class="fa-solid fa-qrcode"></i></div>
+                        <div>
+                            <h3>TOKEN QR CODE SCANNER DESK</h3>
+                            <span class="tag green" style="background:rgba(236,72,153,0.15); color:#db2777; border-color:#ec4899;">CAMERA & FILE SCAN READY</span>
+                        </div>
+                    </div>
+
+                    <div style="background:#fdf2f8; border:1px solid #ec4899; border-radius:14px; padding:18px; text-align:center;">
+                        <i class="fa-solid fa-expand" style="font-size:38px; color:#db2777; margin-bottom:8px;"></i>
+                        <p style="font-size:12px; color:var(--text-muted);">Scan Patient QR Code Token with camera, upload QR image file, or enter Token Code manually below.</p>
+
+                        <div style="display:flex; gap:10px; margin-top:14px; align-items:center;">
+                            <input type="text" id="recManualTokenInput" placeholder="Enter Token Code (e.g. A-14)" value="A-14" style="background:#ffffff; border:1.5px solid #ec4899; border-radius:10px; padding:10px; color:#0f172a; font-size:14px; font-weight:800; text-align:center; flex:1;">
+                            <button class="btn success-btn" onclick="processQrTokenScan()" style="background:linear-gradient(135deg, #ec4899, #db2777); color:#fff;"><i class="fa-solid fa-circle-check"></i> ADMIT PATIENT</button>
+                            <input type="file" id="qrImageFileInput" accept="*/*" style="display:none;">
+                            <button class="btn primary-btn" onclick="document.getElementById('qrImageFileInput').click()" title="Scan QR Image File"><i class="fa-solid fa-upload"></i> SCAN QR FILE</button>
+                        </div>
+                    </div>
+
+                    <div id="recScanResultBox" class="result-box hidden"></div>
+                </div>
+
+                <div class="status-square-card token-status-card" style="border-top-color:#db2777;">
+                    <div class="square-header">
+                        <div class="sq-icon amber" style="background:rgba(236,72,153,0.15); color:#db2777;"><i class="fa-solid fa-bell"></i></div>
+                        <div>
+                            <h3>DOCTOR & PATIENT LIVE EMERGENCY ALERTS</h3>
+                            <span class="tag red">REAL-TIME DESK FEED</span>
+                        </div>
+                    </div>
+
+                    <div id="recLiveAlertsList" style="display:flex; flex-direction:column; gap:10px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: LIVE NOTIFICATIONS -->
+        <section id="tab-rec-notifications" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-bell" style="color:#db2777;"></i> Reception Live Notifications & Hospital Alerts Desk</h2>
+                    <button class="btn-sm cyan" onclick="clearRecNotifications()"><i class="fa-solid fa-broom"></i> Clear All Alerts</button>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="recNotifSearchInput" placeholder="Search hospital emergency alerts, ambulance calls, doctor room updates, or drug advisories...">
+                </div>
+
+                <div class="records-grid" id="recNotifListContainer"></div>
+            </div>
+        </section>
+
+        <!-- TAB: TOKEN QR CODE SCANNER -->
+        <section id="tab-rec-qr-scan" class="tab-page">
+            <div class="card form-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-qrcode" style="color:#db2777;"></i> Optical QR Code Token Scanner Station</h2>
+                    <span class="tag green" style="background:rgba(236,72,153,0.15); color:#db2777; border-color:#ec4899;">Zero Wait Time Admission</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="recTokenSearchInput" placeholder="Search token code (A-14), patient name, doctor, or department...">
+                </div>
+
+                <div style="background:#fdf2f8; border:2px dashed #ec4899; border-radius:18px; padding:30px; text-align:center;">
+                    <i class="fa-solid fa-camera-retro" style="font-size:48px; color:#db2777; margin-bottom:10px;"></i>
+                    <h3>Optical Camera & File Scanner Ready</h3>
+                    <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">Place Patient Digital QR Token in front of reception camera or upload a QR image file.</p>
+
+                    <div style="max-width:500px; margin:0 auto; display:flex; gap:10px; align-items:center;">
+                        <input type="text" id="recScanInput2" placeholder="e.g. A-14" value="A-14" style="background:#ffffff; border:1.5px solid #ec4899; border-radius:10px; padding:12px; color:#0f172a; font-size:16px; font-weight:800; text-align:center; flex:1;">
+                        <button class="btn success-btn" onclick="processQrTokenScan(2)" style="background:linear-gradient(135deg, #ec4899, #db2777); color:#fff;"><i class="fa-solid fa-qrcode"></i> VERIFY QR</button>
+                        <input type="file" id="qrImageFileInput2" accept="*/*" style="display:none;">
+                        <button class="btn primary-btn" onclick="document.getElementById('qrImageFileInput2').click()"><i class="fa-solid fa-file-image"></i> SCAN IMAGE FILE</button>
+                    </div>
+                </div>
+
+                <div id="recScanResultBox2" class="result-box hidden"></div>
+            </div>
+        </section>
+
+        <!-- TAB: APPOINTMENTS & WALK-IN REGISTRATION DESK -->
+        <section id="tab-rec-appointments" class="tab-page">
+            <div class="card form-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-calendar-plus" style="color:#db2777;"></i> Walk-In Patient Registration & Appointment Desk</h2>
+                    <span class="tag cyan">All 12 Health Metrics Required</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="recApptSearchInput" placeholder="Search walk-in appointments by patient name, phone, doctor specialist, or symptoms...">
+                </div>
+
+                <p class="subtitle">Collect all 12 patient vitals and health metrics matching the patient portal booking standard.</p>
+
+                <form id="recWalkinForm" class="grid-form">
+                    <div class="form-group">
+                        <label>Patient Full Name</label>
+                        <input type="text" id="recPatName" placeholder="e.g. Hariss Kumar K" value="Hariss Kumar K" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contact Phone Number</label>
+                        <input type="tel" id="recPatPhone" placeholder="+91 98765 43210" value="+91 98765 43210" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date of Birth (DOB)</label>
+                        <input type="date" id="recPatDob" value="2002-05-14" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Calculated Age (Years)</label>
+                        <input type="text" id="recPatCalculatedAge" value="24 Years" readonly style="background:#fce7f3; color:#db2777; font-weight:700;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Height (cm)</label>
+                        <input type="number" id="recPatHeight" placeholder="e.g. 172" value="172" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Weight (kg)</label>
+                        <input type="number" id="recPatWeight" placeholder="e.g. 68" value="68" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Body Temperature (°F)</label>
+                        <input type="number" step="0.1" id="recPatTemp" placeholder="e.g. 98.6" value="98.6" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Known Medicine Allergies (Select or Type Manually)</label>
+                        <input list="allergyList" id="recPatAllergies" placeholder="Select or type allergies..." value="No Known Allergies" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Reported Symptoms & Reason for Visit</label>
+                        <textarea id="recPatSymptoms" rows="2" placeholder="Describe symptoms..." required>High fever, severe headache and joint pain for 2 days</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>District (Select or Type Manually)</label>
+                        <input list="districtList" id="recPatDistrict" placeholder="Select or type district..." value="Chennai" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Hospital (Select or Type Manually)</label>
+                        <input list="hospitalList" id="recPatHospital" placeholder="Select or type hospital..." value="Rajiv Gandhi Govt General Hospital (RGGGH), Chennai" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Assigned Doctor Specialist (Select or Type Manually)</label>
+                        <input list="doctorList" id="recPatDoctor" placeholder="Select or type doctor specialist..." value="Dr. E. Theranirajan — Pediatrics" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Preferred Date & Time</label>
+                        <input type="datetime-local" id="recPatDateTime" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn success-btn full-width" style="background:linear-gradient(135deg, #ec4899, #db2777); color:#fff;">
+                            <i class="fa-solid fa-user-plus"></i> REGISTER WALK-IN PATIENT & GENERATE QR TOKEN
+                        </button>
+                    </div>
+                </form>
+
+                <div id="recWalkinResultBox" class="result-box hidden"></div>
+            </div>
+        </section>
+
+        <!-- TAB: PATIENT BILLING CALCULATOR & DISCOUNTS -->
+        <section id="tab-rec-billing" class="tab-page">
+            <div class="card form-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-calculator" style="color:#db2777;"></i> Patient Hospital Billing Calculator & Cashless Invoice Desk</h2>
+                    <div style="display:flex; gap:8px;">
+                        <button type="button" class="btn-sm cyan" onclick="addCustomBillRow()"><i class="fa-solid fa-plus"></i> Add Item Row</button>
+                        <button type="button" class="btn-sm success" onclick="printBillingReceipt()"><i class="fa-solid fa-print"></i> PRINT PATIENT RECEIPT</button>
+                    </div>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="recBillSearchInput" placeholder="Search billing items, patient invoice, token, or service charges...">
+                </div>
+
+                <div id="printableBillingPaper" class="printable-prescription-paper">
+                    <div class="doc-letterhead-header">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <div>
+                                <h2 style="color:#db2777; font-family:var(--font-head); font-size:22px; font-weight:900;">RAJIV GANDHI GOVT GENERAL HOSPITAL</h2>
+                                <p style="font-size:12px; color:var(--text-muted);">Official Patient Billing Receipt & Cashless Invoice Terminal</p>
+                                <p style="font-size:11px; color:#db2777;">EVR Periyar Salai, Park Town, Chennai - 600003</p>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="font-family:var(--font-head); font-size:20px; font-weight:900; color:#db2777;">RECEIPT #INV-2026-9921</div>
+                                <div style="font-size:11px; color:var(--text-muted);" id="billPrintDate">Date: 07 Aug 2026</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="billingCalculatorForm" class="grid-form" style="margin-top:16px;">
+                        <div class="form-group">
+                            <label>Patient Full Name & Token</label>
+                            <input type="text" id="billPatientName" value="Hariss Kumar K (Token #A-14)" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>OPD Consultation Fee (₹)</label>
+                            <input type="number" id="billOpdFee" value="150" required class="bill-calc-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Diagnostic Scans Fee (MRI/CT/X-Ray) (₹)</label>
+                            <input type="number" id="billScanFee" value="1200" required class="bill-calc-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Pathology Lab Tests Fee (CBC/Dengue) (₹)</label>
+                            <input type="number" id="billLabFee" value="450" required class="bill-calc-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Pharmacy Medicines Bill (₹)</label>
+                            <input type="number" id="billPharmacyFee" value="380" required class="bill-calc-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Room / Ward Charges (₹)</label>
+                            <input type="number" id="billRoomFee" value="0" required class="bill-calc-input">
+                        </div>
+
+                        <!-- DYNAMIC CUSTOM ITEM ROWS CONTAINER -->
+                        <div class="form-group full-width" style="grid-column:1 / -1;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <label style="color:#db2777;"><i class="fa-solid fa-list-check"></i> Additional Custom Service Rows</label>
+                                <button type="button" class="btn-sm cyan" onclick="addCustomBillRow()"><i class="fa-solid fa-plus"></i> ADD NEW BILL ITEM ROW</button>
+                            </div>
+                            <div id="customBillRowsContainer" style="display:flex; flex-direction:column; gap:10px;"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>CMCHIS Health Insurance Discount (Select or Type Manually)</label>
+                            <input list="discountList" id="billCmchisDiscount" class="bill-calc-input" value="100% Cashless Covered (CMCHIS Scheme)">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tax / GST Rate (%)</label>
+                            <input type="number" id="billGst" value="5" readonly style="background:#fdf2f8;">
+                        </div>
+
+                        <div class="form-group full-width" style="background:#fdf2f8; border:1.5px solid #ec4899; border-radius:14px; padding:16px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <span style="font-size:11px; color:var(--text-muted); font-weight:800;">SUBTOTAL: <span id="billSubtotalDisplay">₹2,180</span></span><br>
+                                    <span style="font-size:11px; color:#db2777; font-weight:800;">CMCHIS SCHEME COVERAGE: <span id="billDiscountDisplay">-₹2,180</span></span>
+                                </div>
+                                <div style="text-align:right;">
+                                    <span style="font-size:10px; color:var(--text-muted); font-weight:900;">NET PAYABLE TOTAL</span>
+                                    <h2 style="font-family:var(--font-head); font-size:28px; color:#db2777;" id="billNetTotalDisplay">₹0 (CASHLESS)</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width" style="display:flex; gap:12px;">
+                            <button type="submit" class="btn success-btn" style="flex:1; background:linear-gradient(135deg, #ec4899, #db2777); color:#fff;">
+                                <i class="fa-solid fa-check-double"></i> CALCULATE & APPROVE FINAL BILL
+                            </button>
+                            <button type="button" class="btn primary-btn" onclick="printBillingReceipt()" style="flex:1;">
+                                <i class="fa-solid fa-print"></i> PRINT OFFICIAL PATIENT RECEIPT
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="billingResultBox" class="result-box hidden"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: CMCHIS & HEALTH INSURANCE APPROVAL DESK -->
+        <section id="tab-rec-insurance" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-file-invoice-dollar" style="color:#db2777;"></i> CMCHIS & Cashless Health Insurance Pre-Authorization Desk</h2>
+                    <span class="tag amber">Government Cashless Portal</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="recInsSearchInput" placeholder="Search insurance claims by policy no, patient name, hospital, or status...">
+                </div>
+
+                <div class="records-grid" id="recInsuranceClaimsList">
+                    <div class="record-card ins-claim-item" data-claim-title="Hariss Kumar K Policy TN-CMCHIS-99201 RGGGH Chennai Dengue" style="align-items:center;">
+                        <div class="rec-icon"><i class="fa-solid fa-building-shield" style="color:#db2777;"></i></div>
+                        <div class="rec-info" style="flex:1;">
+                            <strong style="font-size:15px; color:#0f172a;">Claim #CLM-2026-8812 — Hariss Kumar K</strong>
+                            <p style="font-size:11px; color:var(--text-muted); margin-top:2px;">Policy No: <code>TN-CMCHIS-99201</code> • Hospital: RGGGH Chennai • Claimed Amount: ₹1,50,000</p>
+                        </div>
+                        <div style="display:flex; gap:8px;">
+                            <span class="tag green" style="background:rgba(236,72,153,0.15); color:#db2777; border-color:#ec4899;">APPROVED 🟢</span>
+                            <button class="btn-sm cyan" onclick="approveInsuranceClaim('CLM-2026-8812')"><i class="fa-solid fa-eye"></i> View Approval</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: HOSPITAL PHARMACY INVENTORY MANAGER -->
+        <section id="tab-rec-pharmacy" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-pills" style="color:#db2777;"></i> Hospital Pharmacy Medicines Stock & Batch Manager</h2>
+                    <span class="tag cyan">Inventory Control Desk</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="recPharmSearchInput" placeholder="Search pharmacy inventory by medicine name, batch number, or stock count...">
+                </div>
+
+                <div class="products-grid" id="recPharmacyStockGrid">
+                    <div class="product-card pharm-stock-item" data-pharm-name="Dolo 650mg Paracetamol Batch DLO-2026-09 Stock 4500 Tabs">
+                        <span class="tag green" style="background:rgba(236,72,153,0.15); color:#db2777; border-color:#ec4899;">IN STOCK (4,500 TABS)</span>
+                        <div class="product-title" style="margin-top:6px;">Dolo 650mg Paracetamol</div>
+                        <div style="font-size:11px; color:var(--text-muted);">Batch No: <code>#DLO-2026-09</code> • Exp: 2028</div>
+                        <button class="btn-sm cyan" style="margin-top:10px;" onclick="reorderDrugStock('Dolo 650mg')"><i class="fa-solid fa-plus"></i> Re-Order Batch</button>
+                    </div>
+
+                    <div class="product-card pharm-stock-item" data-pharm-name="Cetirizine 10mg Anti Histamine Batch CET-2026-11 Stock 1200 Tabs">
+                        <span class="tag green" style="background:rgba(236,72,153,0.15); color:#db2777; border-color:#ec4899;">IN STOCK (1,200 TABS)</span>
+                        <div class="product-title" style="margin-top:6px;">Cetirizine 10mg Anti-Histamine</div>
+                        <div style="font-size:11px; color:var(--text-muted);">Batch No: <code>#CET-2026-11</code> • Exp: 2027</div>
+                        <button class="btn-sm cyan" style="margin-top:10px;" onclick="reorderDrugStock('Cetirizine 10mg')"><i class="fa-solid fa-plus"></i> Re-Order Batch</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: AMBULANCE FLEET & DISPATCH HUB -->
+        <section id="tab-rec-ambulance" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-truck-medical" style="color:var(--red);"></i> Emergency 108 Ambulance Dispatch Hub & Fleet Controller</h2>
+                    <span class="tag red">24/7 Dispatch Control</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="recAmbSearchInput" placeholder="Search ambulance fleet by vehicle no (TN-01-AMB-9921), driver name, type, or status...">
+                </div>
+
+                <div class="records-grid" id="recAmbulanceFleetList">
+                    <div class="record-card amb-fleet-item" data-amb-name="TN-01-AMB-9921 Cardiac ICU Driver M. Arumugam Dispatched Guindy" style="align-items:center;">
+                        <div class="rec-icon"><i class="fa-solid fa-truck-medical" style="color:var(--red);"></i></div>
+                        <div class="rec-info" style="flex:1;">
+                            <strong style="font-size:15px; color:#0f172a;">Ambulance #TN-01-AMB-9921 (Cardiac ICU Ventilator)</strong>
+                            <p style="font-size:11px; color:var(--text-muted); margin-top:2px;">Driver: M. Arumugam (+91 98400 11223) • Station: RGGGH Chennai • Status: <span class="tag red">DISPATCHED EN ROUTE (ETA 6 MINS)</span></p>
+                        </div>
+                        <button class="btn-sm danger" onclick="dispatchAmbulance('TN-01-AMB-9921')"><i class="fa-solid fa-location-crosshairs"></i> Track GPS</button>
+                    </div>
+
+                    <div class="record-card amb-fleet-item" data-amb-name="TN-01-AMB-4402 Basic Life Support Driver K. Selvam Ready Station" style="align-items:center;">
+                        <div class="rec-icon"><i class="fa-solid fa-ambulance" style="color:#db2777;"></i></div>
+                        <div class="rec-info" style="flex:1;">
+                            <strong style="font-size:15px; color:#0f172a;">Ambulance #TN-01-AMB-4402 (Basic Life Support BLS)</strong>
+                            <p style="font-size:11px; color:var(--text-muted); margin-top:2px;">Driver: K. Selvam (+91 94441 55667) • Station: RGGGH Chennai • Status: <span class="tag green" style="background:rgba(236,72,153,0.15); color:#db2777; border-color:#ec4899;">READY AT BAY 🟢</span></p>
+                        </div>
+                        <button class="btn-sm success" onclick="dispatchAmbulance('TN-01-AMB-4402')" style="background:linear-gradient(135deg, #ec4899, #db2777); color:#fff;"><i class="fa-solid fa-paper-plane"></i> Dispatch Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FLOATING 3D ROUND AI ASSISTANT WIDGET FOR RECEPTION -->
+    <div id="recFloatingAiBtn" class="floating-ai-3d-btn" onclick="document.getElementById('recFloatingChatDrawer').classList.toggle('hidden')" style="border-color:#ec4899;" title="Open AI Reception Assistant">
+        <div class="ai-3d-sphere" style="background:radial-gradient(circle at 30% 30%, #ec4899, #db2777, #831843);">
+            <i class="fa-solid fa-robot"></i>
+        </div>
+        <span class="ai-pulse-dot"></span>
+        <span class="ai-badge-label" style="color:#db2777;">AI Reception Assistant</span>
+    </div>
+
+    <!-- FLOATING GLASSMORPHIC CHAT DRAWER FOR RECEPTION AI (OPEN BY DEFAULT) -->
+    <div id="recFloatingChatDrawer" class="floating-chat-drawer" style="border-color:#ec4899;">
+        <div class="chat-drawer-header">
+            <div class="chat-header-title">
+                <div class="mini-bot-icon" style="background:linear-gradient(135deg, #ec4899, #db2777);"><i class="fa-solid fa-robot"></i></div>
+                <div>
+                    <h3>VITAMIND Reception AI Assistant</h3>
+                    <p class="chat-langs"><i class="fa-solid fa-hospital-user"></i> Staff Operations & Billing AI</p>
+                </div>
+            </div>
+            <button id="closeRecChatBtn" class="close-chat-btn" onclick="document.getElementById('recFloatingChatDrawer').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="chat-drawer-body" id="recChatMessages">
+            <div class="chat-msg bot">
+                <div class="msg-sender"><i class="fa-solid fa-robot"></i> AI Reception Assistant</div>
+                <div class="msg-text">
+                    Vanakkam Staff! I am your 24/7 AI Operations & Billing Assistant.<br><br>
+                    Ask me about patient QR admission, CMCHIS billing calculations, 108 Ambulance tracking, or drug inventory re-orders!
+                </div>
+            </div>
+        </div>
+
+        <div id="recChatFilePreview" class="chat-file-preview hidden"></div>
+
+        <div class="chat-drawer-footer">
+            <button class="btn-icon-chat" onclick="document.getElementById('recChatFileInput').click()" title="Attach File">
+                <i class="fa-solid fa-paperclip"></i>
+            </button>
+            <input type="file" id="recChatFileInput" accept="*/*" style="display:none;">
+
+            <input type="text" id="recChatInput" placeholder="Ask reception query or attach file...">
+
+            <button id="sendRecChatBtn" class="btn primary-btn" style="padding:10px 14px;"><i class="fa-solid fa-paper-plane"></i></button>
+            <button id="voiceRecChatBtn" class="btn danger-btn" style="padding:10px 14px;"><i class="fa-solid fa-microphone"></i></button>
+        </div>
+    </div>
+
+    <script src="reception-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VITAMIND — Patient Health Portal | All Tamil Nadu Hospitals & Health Intelligence</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- QRCode JS & HTML5 QRCode Decoder Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+
+    <!-- GLOBAL DATALISTS FOR MANUAL INPUT OR SELECT -->
+    <datalist id="bloodGroupList">
+        <option value="O Positive (O+)"></option>
+        <option value="A Positive (A+)"></option>
+        <option value="B Positive (B+)"></option>
+        <option value="AB Positive (AB+)"></option>
+        <option value="O Negative (O-)"></option>
+        <option value="A Negative (A-)"></option>
+        <option value="B Negative (B-)"></option>
+        <option value="AB Negative (AB-)"></option>
+    </datalist>
+
+    <datalist id="allergyList">
+        <option value="No Known Allergies"></option>
+        <option value="Penicillin Allergy"></option>
+        <option value="Sulfa Drugs Allergy"></option>
+        <option value="NSAIDs / Aspirin Allergy"></option>
+        <option value="Cephalosporin Allergy"></option>
+        <option value="Latex Allergy"></option>
+    </datalist>
+
+    <datalist id="districtList">
+        <option value="Ariyalur"></option><option value="Chengalpattu"></option><option value="Chennai"></option>
+        <option value="Coimbatore"></option><option value="Cuddalore"></option><option value="Dharmapuri"></option>
+        <option value="Dindigul"></option><option value="Erode"></option><option value="Kallakurichi"></option>
+        <option value="Kanchipuram"></option><option value="Kanyakumari"></option><option value="Karur"></option>
+        <option value="Krishnagiri"></option><option value="Madurai"></option><option value="Mayiladuthurai"></option>
+        <option value="Nagapattinam"></option><option value="Namakkal"></option><option value="Nilgiris (Ooty)"></option>
+        <option value="Perambalur"></option><option value="Pudukkottai"></option><option value="Ramanathapuram"></option>
+        <option value="Rameswaram"></option><option value="Ranipet"></option><option value="Salem"></option>
+        <option value="Sivaganga"></option><option value="Tenkasi"></option><option value="Thanjavur"></option>
+        <option value="Theni"></option><option value="Thiruvallur"></option><option value="Thiruvarur"></option>
+        <option value="Thoothukudi (Tuticorin)"></option><option value="Tiruchirappalli (Trichy)"></option>
+        <option value="Tirunelveli"></option><option value="Tirupattur"></option><option value="Tiruppur"></option>
+        <option value="Tiruvannamalai"></option><option value="Vellore"></option><option value="Viluppuram"></option>
+        <option value="Virudhunagar"></option>
+    </datalist>
+
+    <datalist id="hospitalList">
+        <option value="Rajiv Gandhi Govt General Hospital (RGGGH), Chennai"></option>
+        <option value="Coimbatore Medical College Hospital (CMCH), Coimbatore"></option>
+        <option value="Government Rajaji Hospital (GRH), Madurai"></option>
+        <option value="Stanley Medical College Hospital, Chennai"></option>
+        <option value="Kilpauk Medical College Hospital, Chennai"></option>
+        <option value="Apollo Super Specialty Hospital, Greams Road, Chennai"></option>
+        <option value="Christian Medical College (CMC), Vellore"></option>
+        <option value="MIOT International Hospital, Manapakkam, Chennai"></option>
+        <option value="PSG Hospitals, Peelamedu, Coimbatore"></option>
+        <option value="Meenakshi Mission Hospital, Madurai"></option>
+    </datalist>
+
+    <datalist id="doctorList">
+        <option value="Dr. E. Theranirajan — Pediatrics"></option>
+        <option value="Dr. S. Rajasekaran — Orthopedics & Spine"></option>
+        <option value="Dr. S. Thanikachalam — Cardiology"></option>
+        <option value="Dr. V. Mohan — Diabetology"></option>
+        <option value="Dr. K. Senthil — General Medicine"></option>
+        <option value="Dr. J. A. Jayalal — General Surgery"></option>
+        <option value="Dr. V. Ramasubramanian — Infectious Diseases"></option>
+        <option value="Dr. K. Arul — Neurology"></option>
+    </datalist>
+
+    <datalist id="ambTypeList">
+        <option value="Cardiac ICU Ventilator Ambulance (Critical Care)"></option>
+        <option value="Advanced Life Support (ALS Ambulance)"></option>
+        <option value="Basic Life Support (BLS Ambulance)"></option>
+        <option value="Non-Emergency Patient Transport Ambulance"></option>
+        <option value="Neonatal Pediatric ICU Ambulance"></option>
+    </datalist>
+
+    <!-- PATIENT AUTHENTICATION & NEW ACCOUNT CREATION MODAL -->
+    <div id="patientLoginModal" class="login-modal-overlay">
+        <div class="login-card shadow-2xl">
+            <div class="login-header">
+                <div class="login-brand-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                <h2 id="patientModalTitle">VITAM<span>IND</span> Patient Portal</h2>
+                <p id="patientModalSubtitle">Healthcare Automation Using Agentic AI • Secure Patient Access</p>
+            </div>
+
+            <!-- LOGIN VIEW -->
+            <div id="patientLoginView">
+                <div class="auth-tabs">
+                    <button class="auth-tab-btn active" data-auth="mobile"><i class="fa-solid fa-mobile-screen-button"></i> Mobile OTP</button>
+                    <button class="auth-tab-btn" data-auth="email"><i class="fa-solid fa-envelope"></i> Email OTP</button>
+                    <button class="auth-tab-btn" data-auth="aadhaar"><i class="fa-solid fa-id-card"></i> Aadhaar OTP</button>
+                    <button class="auth-tab-btn" data-auth="google"><i class="fa-brands fa-google"></i> Google SSO</button>
+                </div>
+
+                <div class="auth-body">
+                    <div id="auth-mobile" class="auth-method-pane active">
+                        <div class="form-group">
+                            <label>Enter 10-Digit Mobile Phone Number</label>
+                            <div class="input-with-prefix">
+                                <span class="prefix">+91</span>
+                                <input type="tel" id="mobileNumberInput" placeholder="98765 43210" maxlength="10" value="9876543210">
+                            </div>
+                        </div>
+                        <button class="btn primary-btn full-width" onclick="sendOtp('mobile')"><i class="fa-solid fa-paper-plane"></i> SEND 6-DIGIT OTP</button>
+                    </div>
+
+                    <div id="auth-email" class="auth-method-pane">
+                        <div class="form-group">
+                            <label>Enter Registered Email ID</label>
+                            <input type="email" id="emailInput" placeholder="patient@example.com" value="hariss.kumar@example.com">
+                        </div>
+                        <button class="btn primary-btn full-width" onclick="sendOtp('email')"><i class="fa-solid fa-paper-plane"></i> SEND EMAIL OTP</button>
+                    </div>
+
+                    <div id="auth-aadhaar" class="auth-method-pane">
+                        <div class="form-group">
+                            <label>Enter 12-Digit Aadhaar Card Number</label>
+                            <input type="text" id="aadhaarInput" placeholder="1234 - 5678 - 9012" maxlength="14" value="1234 5678 9012">
+                        </div>
+                        <button class="btn primary-btn full-width" onclick="sendOtp('aadhaar')"><i class="fa-solid fa-shield-halved"></i> VERIFY WITH UIDAI AADHAAR OTP</button>
+                    </div>
+
+                    <div id="auth-google" class="auth-method-pane">
+                        <div class="google-login-box">
+                            <i class="fa-brands fa-google" style="font-size:38px; color:#ea4335;"></i>
+                            <p style="font-size:12px; color:var(--text-muted);">Instant 1-Click SSO authentication with your Google ID (No OTP required).</p>
+                            <button class="btn success-btn full-width" onclick="loginWithGoogle()"><i class="fa-brands fa-google"></i> CONTINUE WITH GOOGLE ACCOUNT (DIRECT LOGIN)</button>
+                        </div>
+                    </div>
+
+                    <div id="otpVerifySection" class="otp-verify-section hidden">
+                        <hr style="border-color:var(--border); margin:16px 0;">
+                        <div class="form-group">
+                            <label style="color:var(--green); font-weight:800;"><i class="fa-solid fa-key"></i> Enter 6-Digit OTP Code (Simulated Demo OTP: 123456)</label>
+                            <input type="text" id="otpCodeInput" placeholder="Enter 6-digit OTP (e.g. 123456)" maxlength="6" value="123456" style="letter-spacing:6px; font-size:18px; text-align:center; font-weight:800;">
+                        </div>
+                        <button class="btn success-btn full-width" onclick="verifyAndLogin()"><i class="fa-solid fa-circle-check"></i> VERIFY OTP & LOGIN TO PORTAL</button>
+                    </div>
+                </div>
+
+                <div style="margin-top:18px; text-align:center; border-top:1px solid var(--border); padding-top:14px;">
+                    <p style="font-size:12px; color:var(--text-muted);">Don't have a patient account yet?</p>
+                    <button type="button" class="btn-sm cyan" style="margin-top:6px;" onclick="togglePatientAuthMode('register')">
+                        <i class="fa-solid fa-user-plus"></i> CREATE NEW PATIENT ACCOUNT
+                    </button>
+                </div>
+            </div>
+
+            <!-- REGISTER NEW PATIENT ACCOUNT VIEW -->
+            <div id="patientRegisterView" class="hidden">
+                <form id="createNewPatientForm" class="grid-form">
+                    <div class="form-group">
+                        <label>Full Patient Name</label>
+                        <input type="text" id="regPatName" placeholder="e.g. Hariss Kumar K" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mobile Phone Number</label>
+                        <input type="tel" id="regPatPhone" placeholder="+91 98765 43210" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="regPatEmail" placeholder="patient@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Aadhaar Card Number</label>
+                        <input type="text" id="regPatAadhaar" placeholder="1234 5678 9012" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date of Birth (DOB)</label>
+                        <input type="date" id="regPatDob" value="2002-05-14" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Blood Group (Select or Type Manually)</label>
+                        <input list="bloodGroupList" id="regPatBloodGroup" placeholder="Select or type blood group..." value="O Positive (O+)" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Residential Address (Tamil Nadu)</label>
+                        <input type="text" id="regPatAddress" placeholder="No 42, Anna Salai, Guindy, Chennai - 600032" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Create Password / PIN</label>
+                        <input type="password" id="regPatPassword" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn success-btn full-width">
+                            <i class="fa-solid fa-user-check"></i> REGISTER ACCOUNT & LOGIN NOW
+                        </button>
+                    </div>
+                </form>
+
+                <div style="margin-top:14px; text-align:center; border-top:1px solid var(--border); padding-top:12px;">
+                    <p style="font-size:12px; color:var(--text-muted);">Already have a patient account?</p>
+                    <button type="button" class="btn-sm cyan" style="margin-top:6px;" onclick="togglePatientAuthMode('login')">
+                        <i class="fa-solid fa-right-to-bracket"></i> BACK TO LOGIN
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PATIENT PROFILE MANAGEMENT MODAL -->
+    <div id="patientProfileModal" class="login-modal-overlay hidden">
+        <div class="profile-modal-card shadow-2xl">
+            <button class="close-modal-btn" onclick="document.getElementById('patientProfileModal').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
+
+            <div class="profile-avatar-wrapper">
+                <div style="position:relative;">
+                    <img id="profileAvatarImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80" alt="Patient Avatar" class="profile-avatar-img">
+                    <button type="button" class="btn-sm cyan" style="position:absolute; bottom:-6px; right:-6px; padding:4px 8px; font-size:10px; border-radius:50%;" onclick="document.getElementById('profAvatarFileInput').click()" title="Upload Photo from System">
+                        <i class="fa-solid fa-camera"></i>
+                    </button>
+                </div>
+
+                <div style="flex:1;">
+                    <h2 style="color:var(--accent-gold); font-family:var(--font-head); font-size:22px; font-weight:900;" id="modalProfileName">Hariss Kumar K</h2>
+                    <span class="tag green"><i class="fa-solid fa-shield-check"></i> CMCHIS VERIFIED PATIENT</span>
+                    <p style="font-size:11px; color:var(--cyan); margin-top:4px;">Patient ID: <code>#TN-PATIENT-99281</code></p>
+                    <div style="margin-top:8px;">
+                        <input type="file" id="profAvatarFileInput" accept="*/*" style="display:none;">
+                        <button type="button" class="btn-sm cyan" onclick="document.getElementById('profAvatarFileInput').click()">
+                            <i class="fa-solid fa-upload"></i> UPLOAD PROFILE PHOTO FROM SYSTEM
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <form id="profileEditForm" class="grid-form">
+                <div class="form-group">
+                    <label>Full Patient Name</label>
+                    <input type="text" id="profName" value="Hariss Kumar K" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Contact Mobile Phone</label>
+                    <input type="tel" id="profPhone" value="+91 98765 43210" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="profEmail" value="hariss.kumar@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Aadhaar Card Number</label>
+                    <input type="text" id="profAadhaar" value="1234 5678 9012" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Date of Birth (DOB)</label>
+                    <input type="date" id="profDob" value="2002-05-14" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Blood Group (Select or Type Manually)</label>
+                    <input list="bloodGroupList" id="profBloodGroup" value="O Positive (O+)">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Residential Address (Tamil Nadu)</label>
+                    <input type="text" id="profAddress" value="No 42, Anna Salai, Guindy, Chennai - 600032" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Emergency Contact Phone</label>
+                    <input type="tel" id="profEmergency" value="+91 94440 12345" required>
+                </div>
+
+                <div class="form-group full-width" style="margin-top:10px;">
+                    <button type="submit" class="btn success-btn full-width"><i class="fa-solid fa-save"></i> SAVE PROFILE CHANGES</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Top Header -->
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+            <div>
+                <h1>VITAM<span>IND</span> <span class="state-tag">PATIENT HEALTH PORTAL</span></h1>
+                <p>Healthcare Automation Using Agentic AI</p>
+            </div>
+        </div>
+
+        <div class="header-status-group">
+            <button class="view-profile-hdr-btn" onclick="openProfileModal()">
+                <i class="fa-solid fa-user-gear"></i> VIEW & MANAGE PROFILE
+            </button>
+
+            <!-- 3D ROUND SPHERE HEADER PROFILE AVATAR PHOTO -->
+            <div class="user-profile-badge" id="userProfileBadge">
+                <img id="headerProfileAvatarImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80" alt="User Profile Photo" class="header-3d-profile-avatar" onclick="openProfileModal()" title="Click to View & Manage Profile">
+                <span id="userProfileName">Logged in: <strong>Hariss Kumar K</strong></span>
+                <button class="logout-sm-btn" onclick="logoutPatient()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            </div>
+            <div class="status-badge cmchis"><i class="fa-solid fa-hospital-user"></i> CMCHIS VERIFIED</div>
+            <div class="clock-display" id="liveClock">07 Aug 2026 • 00:00:00</div>
+        </div>
+    </header>
+
+    <!-- REAL-TIME TOAST NOTIFICATION CONTAINER -->
+    <div id="toastNotificationContainer" class="toast-notification-container"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <button class="nav-btn active" data-tab="dashboard">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Dashboard</span>
+        </button>
+
+        <button class="nav-btn tab-with-badge" data-tab="notifications" id="navNotificationsTab">
+            <i class="fa-solid fa-bell"></i>
+            <span>Live Notifications</span>
+            <span class="tab-notif-badge" id="tabNotifBadge">3</span>
+        </button>
+
+        <button class="nav-btn" data-tab="saved-records">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>Saved Medical Records</span>
+        </button>
+
+        <button class="nav-btn" data-tab="ambulance">
+            <i class="fa-solid fa-truck-medical"></i>
+            <span>Book Ambulance</span>
+        </button>
+
+        <button class="nav-btn" data-tab="prescriptions">
+            <i class="fa-solid fa-file-prescription"></i>
+            <span>My Prescriptions</span>
+        </button>
+
+        <button class="nav-btn" data-tab="records">
+            <i class="fa-solid fa-folder-open"></i>
+            <span>Upload Medical Records</span>
+        </button>
+
+        <button class="nav-btn" data-tab="hospitals">
+            <i class="fa-solid fa-hospital"></i>
+            <span>TN Hospital Directory</span>
+        </button>
+
+        <button class="nav-btn" data-tab="appointments">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span>Book Appointment</span>
+        </button>
+
+        <button class="nav-btn" data-tab="tokens">
+            <i class="fa-solid fa-qrcode"></i>
+            <span>Digital QR Token</span>
+        </button>
+
+        <button class="nav-btn" data-tab="store">
+            <i class="fa-solid fa-store"></i>
+            <span>VITAMIND Store</span>
+        </button>
+
+        <button class="nav-btn" data-tab="kyc">
+            <i class="fa-solid fa-id-card"></i>
+            <span>KYC Onboarding</span>
+        </button>
+
+        <button class="nav-btn" data-tab="claims">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <span>CMCHIS Claims</span>
+        </button>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="app-main">
+
+        <!-- TAB 1: PATIENT DASHBOARD -->
+        <section id="tab-dashboard" class="tab-page active">
+            <div class="metrics-grid">
+                <div class="metric-card primary">
+                    <i class="fa-solid fa-hospital"></i>
+                    <div>
+                        <span class="val">14,850+ Hospitals</span>
+                        <span class="lbl">TOTAL HOSPITALS IN TAMIL NADU</span>
+                    </div>
+                </div>
+
+                <div class="metric-card success">
+                    <i class="fa-solid fa-building-shield"></i>
+                    <div>
+                        <span class="val">Govt, Private, Trust, Self-Financing</span>
+                        <span class="lbl">ALL HOSPITAL TYPES CONNECTED</span>
+                    </div>
+                </div>
+
+                <div class="metric-card warning">
+                    <i class="fa-solid fa-qrcode"></i>
+                    <div>
+                        <span class="val" id="myHospitalTokenStatus">Token #A-14 (RGGGH Chennai)</span>
+                        <span class="lbl">MY BOOKED HOSPITAL TOKEN STATUS</span>
+                    </div>
+                </div>
+
+                <div class="metric-card info">
+                    <i class="fa-solid fa-shield-virus"></i>
+                    <div>
+                        <span class="val">Active Health Alert</span>
+                        <span class="lbl">TN VIRAL OUTBREAK ADVISORY</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DASHBOARD STATUS SQUARE GRID BOXES -->
+            <div class="dashboard-status-grid-2col">
+                <div class="status-square-card appointment-status-card">
+                    <div class="square-header">
+                        <div class="sq-icon green"><i class="fa-solid fa-calendar-check"></i></div>
+                        <div>
+                            <h3>APPOINTMENT BOOKING STATUS</h3>
+                            <span class="tag green">CONFIRMED & SCHEDULED</span>
+                        </div>
+                    </div>
+
+                    <div class="square-body-grid">
+                        <div class="sq-info-item">
+                            <span class="sq-label">PATIENT NAME</span>
+                            <strong class="sq-val" id="dashApptPatientName">Hariss Kumar K</strong>
+                        </div>
+                        <div class="sq-info-item">
+                            <span class="sq-label">BOOKED HOSPITAL</span>
+                            <strong class="sq-val gold" id="dashApptHospital">Rajiv Gandhi Govt General Hospital (RGGGH)</strong>
+                        </div>
+                        <div class="sq-info-item">
+                            <span class="sq-label">DOCTOR SPECIALIST</span>
+                            <strong class="sq-val" id="dashApptDoctor">Dr. E. Theranirajan (Pediatrics)</strong>
+                        </div>
+                        <div class="sq-info-item">
+                            <span class="sq-label">CONFIRMED TIME SLOT</span>
+                            <strong class="sq-val cyan" id="dashApptTime">Today • 10:00 AM</strong>
+                        </div>
+                    </div>
+
+                    <div class="square-footer">
+                        <button class="btn primary-btn full-width" onclick="switchToTab('appointments')">
+                            <i class="fa-solid fa-calendar-plus"></i> BOOK NEW / RESCHEDULE APPOINTMENT
+                        </button>
+                    </div>
+                </div>
+
+                <div class="status-square-card token-status-card">
+                    <div class="square-header">
+                        <div class="sq-icon amber"><i class="fa-solid fa-qrcode"></i></div>
+                        <div>
+                            <h3>ONGOING TOKEN & QUEUE STATUS</h3>
+                            <span class="tag amber">OPD QUEUE IN PROGRESS</span>
+                        </div>
+                    </div>
+
+                    <div class="square-body-grid">
+                        <div class="sq-info-item">
+                            <span class="sq-label">YOUR ASSIGNED TOKEN</span>
+                            <strong class="sq-val green-huge" id="dashTokenNum">Token #A-14</strong>
+                        </div>
+                        <div class="sq-info-item">
+                            <span class="sq-label">NOW SERVING IN ROOM</span>
+                            <strong class="sq-val amber" id="dashServingNum">Token #A-12 (Vignesh S)</strong>
+                        </div>
+                        <div class="sq-info-item">
+                            <span class="sq-label">NEXT UP IN QUEUE</span>
+                            <strong class="sq-val cyan" id="dashNextNum">Token #A-13 (Tamilventhan M)</strong>
+                        </div>
+                        <div class="sq-info-item">
+                            <span class="sq-label">ESTIMATED WAIT TIME</span>
+                            <strong class="sq-val gold">0 Mins (QR Code Scan Ready)</strong>
+                        </div>
+                    </div>
+
+                    <div class="square-footer">
+                        <button class="btn success-btn full-width" onclick="switchToTab('tokens')">
+                            <i class="fa-solid fa-qrcode"></i> VIEW DIGITAL QR TOKEN CARD
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NETFLIX-STYLE TRENDING NOW HEALTH ALERTS CAROUSEL ROW WITH GIANT NUMBERS -->
+            <div class="card netflix-trending-section">
+                <div class="card-header" style="margin-bottom:12px;">
+                    <h2 class="netflix-section-title"><i class="fa-solid fa-fire-flame-curved" style="color:#e65100;"></i> Trending Health Alerts & Outbreak News in Tamil Nadu</h2>
+                    <div class="carousel-nav-btns">
+                        <button id="prevSlideBtn" class="icon-btn netflix-nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button id="nextSlideBtn" class="icon-btn netflix-nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </div>
+
+                <div class="netflix-carousel-container" id="netflixCarouselRow">
+                    <!-- CARD 1 -->
+                    <div class="netflix-poster-card active">
+                        <div class="netflix-number-badge">1</div>
+                        <div class="netflix-poster-inner">
+                            <img src="https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?auto=format&fit=crop&w=600&q=80" alt="Dengue Alert" class="netflix-poster-img">
+                            <div class="netflix-poster-overlay">
+                                <span class="tag red">🔴 VIRAL OUTBREAK ALERT</span>
+                                <h4>Dengue & H3N2 Seasonal Flu Advisory</h4>
+                                <p>Free fever clinic camps active across 38 Tamil Nadu districts. Emergency blood platelet units ready.</p>
+                                <div class="netflix-card-footer">
+                                    <span class="slide-date"><i class="fa-solid fa-calendar"></i> 07 Aug 2026</span>
+                                    <button class="btn-sm cyan" onclick="alert('Dengue Advisory: Drink 3L fluids and visit nearest Govt Hospital.')"><i class="fa-solid fa-circle-info"></i> View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 2 -->
+                    <div class="netflix-poster-card">
+                        <div class="netflix-number-badge">2</div>
+                        <div class="netflix-poster-inner">
+                            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80" alt="CMCHIS Insurance" class="netflix-poster-img">
+                            <div class="netflix-poster-overlay">
+                                <span class="tag green">🟢 CMCHIS GOVT SCHEME</span>
+                                <h4>₹5 Lakhs Cashless Health Coverage Expansion</h4>
+                                <p>Tamil Nadu Chief Minister's Comprehensive Insurance Scheme now covers 1,450+ surgical procedures.</p>
+                                <div class="netflix-card-footer">
+                                    <span class="slide-date"><i class="fa-solid fa-calendar"></i> 06 Aug 2026</span>
+                                    <button class="btn-sm success" onclick="switchToTab('claims')"><i class="fa-solid fa-shield-check"></i> Check Eligibility</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 3 -->
+                    <div class="netflix-poster-card">
+                        <div class="netflix-number-badge">3</div>
+                        <div class="netflix-poster-inner">
+                            <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=600&q=80" alt="108 Ambulance" class="netflix-poster-img">
+                            <div class="netflix-poster-overlay">
+                                <span class="tag amber">🚑 108 AMBULANCE FLEET</span>
+                                <h4>New Cardiac ICU 108 Ambulances Launched</h4>
+                                <p>500 new advanced life support ambulances deployed across Chennai, Trichy, & Coimbatore expressways.</p>
+                                <div class="netflix-card-footer">
+                                    <span class="slide-date"><i class="fa-solid fa-calendar"></i> 05 Aug 2026</span>
+                                    <button class="btn-sm warning" onclick="switchToTab('ambulance')"><i class="fa-solid fa-truck-medical"></i> Book 108 Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 4 -->
+                    <div class="netflix-poster-card">
+                        <div class="netflix-number-badge">4</div>
+                        <div class="netflix-poster-inner">
+                            <img src="https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&w=600&q=80" alt="Free Fever Clinics" class="netflix-poster-img">
+                            <div class="netflix-poster-overlay">
+                                <span class="tag cyan">🏥 FREE GOVT CLINIC</span>
+                                <h4>24/7 Mobile Fever Clinics Active in TN</h4>
+                                <p>Walk-in blood tests, free paracetamol distribution, and doctor consultations available at zero cost.</p>
+                                <div class="netflix-card-footer">
+                                    <span class="slide-date"><i class="fa-solid fa-calendar"></i> 04 Aug 2026</span>
+                                    <button class="btn-sm cyan" onclick="switchToTab('hospitals')"><i class="fa-solid fa-hospital"></i> Find Nearest Clinic</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 5 -->
+                    <div class="netflix-poster-card">
+                        <div class="netflix-number-badge">5</div>
+                        <div class="netflix-poster-inner">
+                            <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80" alt="Vaccination Drive" class="netflix-poster-img">
+                            <div class="netflix-poster-overlay">
+                                <span class="tag purple">💉 VACCINATION DRIVE</span>
+                                <h4>Statewide Seasonal Flu & Typhoid Vaccination</h4>
+                                <p>Free immunization camps for children & senior citizens across all Government Primary Health Centres (PHCs).</p>
+                                <div class="netflix-card-footer">
+                                    <span class="slide-date"><i class="fa-solid fa-calendar"></i> 03 Aug 2026</span>
+                                    <button class="btn-sm cyan" onclick="switchToTab('appointments')"><i class="fa-solid fa-syringe"></i> Book Vaccine Slot</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DEDICATED NOTIFICATIONS TAB PAGE -->
+        <section id="tab-notifications" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-bell" style="color:var(--cyan);"></i> Real-Time Notifications & Patient Health Alerts Center</h2>
+                    <button class="btn-sm cyan" onclick="clearNotifications()"><i class="fa-solid fa-broom"></i> Clear All Alerts</button>
+                </div>
+                <p class="subtitle">Live push updates regarding your booked token queue, new government health schemes, and viral disease outbreaks in your district.</p>
+                <div id="tabNotificationList" class="tab-notifications-grid"></div>
+            </div>
+        </section>
+
+        <!-- TAB: SAVED MEDICAL RECORDS (PATIENT & DOCTOR UPLOADED RECORDS VAULT) -->
+        <section id="tab-saved-records" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-box-archive" style="color:var(--accent-gold);"></i> Saved Medical Records Vault (Uploaded by Patients & Doctors)</h2>
+                    <span class="tag green"><i class="fa-solid fa-shield-check"></i> Encrypted Health Storage</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="savedRecordSearchInput" placeholder="Search saved medical records by title, uploader (Patient / Doctor), lab name, diagnosis, or date...">
+                </div>
+
+                <p class="subtitle">View, preview, download, and manage all saved medical records uploaded by you or issued by consulting doctors.</p>
+
+                <div class="records-grid" id="savedRecordsContainer"></div>
+            </div>
+        </section>
+
+        <!-- TAB: PATIENT AMBULANCE BOOKING DISPATCH DESK -->
+        <section id="tab-ambulance" class="tab-page">
+            <div class="card form-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-truck-medical" style="color:var(--red);"></i> Emergency 108 Hospital Ambulance Booking & Live GPS Dispatch</h2>
+                    <span class="tag red">24/7 Emergency Dispatch Desk</span>
+                </div>
+
+                <!-- 1-TOUCH SOS BUTTON -->
+                <div style="background:rgba(239,68,68,0.15); border:2px dashed var(--red); border-radius:18px; padding:24px; text-align:center; margin-bottom:20px;">
+                    <i class="fa-solid fa-bell-concierge" style="font-size:42px; color:var(--red); animation:pulse 1.5s infinite;"></i>
+                    <h3 style="color:#fff; font-size:18px; margin-top:8px;">NEED IMMEDIATE EMERGENCY AMBULANCE?</h3>
+                    <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">Press the One-Touch SOS button to alert hospital reception & dispatch nearest 108 ambulance with GPS tracking.</p>
+                    <button class="btn danger-btn full-width" style="padding:16px; font-size:16px;" onclick="triggerOneTouchAmbulanceSos()">
+                        <i class="fa-solid fa-triangle-exclamation"></i> 🚨 ONE-TOUCH EMERGENCY 108 AMBULANCE SOS
+                    </button>
+                </div>
+
+                <h3><i class="fa-solid fa-ambulance" style="color:var(--cyan);"></i> Book Scheduled / Emergency Ambulance</h3>
+                <p class="subtitle">Fill details to dispatch ICU, Cardiac, BLS, or Transport Ambulance directly to your doorstep.</p>
+
+                <form id="patientAmbulanceForm" class="grid-form">
+                    <div class="form-group">
+                        <label>Patient Full Name</label>
+                        <input type="text" id="patAmbName" value="Hariss Kumar K" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contact Mobile Phone</label>
+                        <input type="tel" id="patAmbPhone" value="+91 98765 43210" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Pickup Doorstep Address (GPS Location)</label>
+                        <input type="text" id="patAmbPickupAddress" value="No 42, Anna Salai, Guindy, Chennai - 600032" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Destination District (Select or Type Manually)</label>
+                        <input list="districtList" id="patAmbDistrict" placeholder="Select or type district..." value="Chennai" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Destination Hospital (Select or Type Manually)</label>
+                        <input list="hospitalList" id="patAmbHospital" placeholder="Select or type hospital..." value="Rajiv Gandhi Govt General Hospital (RGGGH), Chennai" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ambulance Category / Fleet Type (Select or Type Manually)</label>
+                        <input list="ambTypeList" id="patAmbType" placeholder="Select or type ambulance category..." value="Cardiac ICU Ventilator Ambulance (Critical Care)" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Medical Emergency Reason / Symptoms</label>
+                        <input type="text" id="patAmbReason" placeholder="e.g. Chest Pain, High Fever, Trauma" value="Severe Dengue Fever & Platelet Drop" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn success-btn full-width">
+                            <i class="fa-solid fa-paper-plane"></i> DISPATCH AMBULANCE & TRANSMIT GPS ALERT TO RECEPTION
+                        </button>
+                    </div>
+                </form>
+
+                <div id="patAmbResultBox" class="result-box hidden"></div>
+            </div>
+        </section>
+
+        <!-- TAB: MY DOCTOR PRESCRIPTIONS -->
+        <section id="tab-prescriptions" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-file-prescription" style="color:var(--purple);"></i> My Doctor E-Prescriptions & Clinical Notes</h2>
+                    <span class="tag green"><i class="fa-solid fa-rotate"></i> Synced with Doctor Portal & Hospital Reception</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="patPrescSearchInput" placeholder="Search prescriptions by medicine name (Dolo, Cetirizine), doctor name, diagnosis, or date...">
+                </div>
+
+                <p class="subtitle">Official digitally signed prescriptions issued by your consulting doctor. Print manually or order online via PharmEasy.</p>
+
+                <div id="patientPrescriptionsContainer" class="records-grid"></div>
+            </div>
+        </section>
+
+        <!-- TAB: PATIENT EMR MEDICAL RECORDS UPLOAD FROM SYSTEM HARDWARE -->
+        <section id="tab-records" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-folder-open"></i> Upload New Patient EMR & Medical Record File From System</h2>
+                    <span class="tag cyan">Encrypted Health Storage</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="patRecordSearchInput" placeholder="Search stored medical records by report title, lab name (Apollo, RGGGH), or date...">
+                </div>
+
+                <p class="subtitle">Upload, view, preview, manage, download, and delete past medical records from your local computer system or dispatch files directly to your doctor.</p>
+
+                <div class="upload-box" id="emrUploadDropzone" style="cursor:pointer;" onclick="document.getElementById('emrFileInput').click()">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size:36px; color:var(--accent-gold);"></i>
+                    <h3>Upload Medical Document / Lab Report / Prescription Image / PDF</h3>
+                    <p style="font-size:11px; color:var(--text-muted);">Click anywhere in this box or button below to select ANY file from your Windows System.</p>
+                    <input type="file" id="emrFileInput" accept="*/*" style="display:none;">
+                    <button type="button" class="btn primary-btn" style="margin-top:12px;" onclick="event.stopPropagation(); document.getElementById('emrFileInput').click()"><i class="fa-solid fa-laptop-medical"></i> BROWSE & UPLOAD FILE FROM SYSTEM</button>
+                </div>
+
+                <div id="filePreviewContainer" class="file-preview-box hidden" style="background:rgba(3,7,18,0.9); border:1.5px solid var(--cyan); border-radius:14px; padding:16px; margin-top:16px;">
+                    <h4 style="color:var(--cyan); margin-bottom:8px;"><i class="fa-solid fa-eye"></i> Uploaded File Preview:</h4>
+                    <div id="filePreviewContent"></div>
+                </div>
+
+                <h3 style="margin-top:24px; font-size:15px; color:#fff;"><i class="fa-solid fa-file-medical"></i> RECENTLY UPLOADED MEDICAL DOCUMENTS</h3>
+                <div class="records-grid" id="recordsGridContainer"></div>
+            </div>
+        </section>
+
+        <!-- TAB: TN HOSPITAL DIRECTORY -->
+        <section id="tab-hospitals" class="tab-page">
+            <div class="card">
+                <h2><i class="fa-solid fa-hospital-user"></i> All 14,850+ Hospitals Directory (Click Any Hospital to View Photos, Status & Google Maps)</h2>
+                
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="patHospSearchInput" placeholder="Search hospitals by hospital name, district, address, or ownership type...">
+                </div>
+
+                <div class="filter-bar-grid">
+                    <input list="districtList" id="districtFilter" placeholder="Filter by District (or type manually)..." style="background:rgba(2,6,23,0.85); border:1.5px solid var(--border); border-radius:12px; padding:12px; color:#fff; font-size:13px;">
+
+                    <select id="hospitalTypeFilter">
+                        <option value="ALL">All Ownership Types</option>
+                        <option value="Government">Government Hospitals & Medical Colleges</option>
+                        <option value="Private">Private Corporate Super Specialty</option>
+                        <option value="Trust">Trust & Charitable Running Hospitals</option>
+                        <option value="Self-Financing">Self-Financing Medical College Hospitals</option>
+                        <option value="Govt Affiliated">Govt Affiliated / Public Specialty</option>
+                    </select>
+                </div>
+
+                <div class="hospitals-grid" id="hospitalsGridContainer"></div>
+            </div>
+        </section>
+
+        <!-- TAB: APPOINTMENT BOOKING -->
+        <section id="tab-appointments" class="tab-page">
+            <div class="card form-card">
+                <h2><i class="fa-solid fa-calendar-plus"></i> Patient Doctor Appointment Scheduler</h2>
+                <p class="subtitle">Enter your health metrics (Height, Weight, Temp, Allergies) and select any hospital across Tamil Nadu.</p>
+
+                <form id="appointmentForm" class="grid-form">
+                    <div class="form-group">
+                        <label>Patient Full Name</label>
+                        <input type="text" id="apptPatientName" placeholder="Enter full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contact Phone Number</label>
+                        <input type="tel" id="apptPhone" placeholder="+91 98765 43210" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date of Birth (DOB)</label>
+                        <input type="date" id="apptDob" value="2002-05-14" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Calculated Age (Years)</label>
+                        <input type="text" id="apptCalculatedAge" value="24 Years" readonly style="background:rgba(0,242,254,0.1); color:var(--cyan); font-weight:700;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Height (cm)</label>
+                        <input type="number" id="apptHeight" placeholder="e.g. 172" value="172" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Weight (kg)</label>
+                        <input type="number" id="apptWeight" placeholder="e.g. 68" value="68" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Body Temperature (°F)</label>
+                        <input type="number" step="0.1" id="apptTemp" placeholder="e.g. 98.6" value="98.6" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Medicine Allergies (Select or Type Manually)</label>
+                        <input list="allergyList" id="apptAllergySelect" placeholder="Select or type allergy..." value="No Known Allergies" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Health Issue / Symptoms / Reason for Visit</label>
+                        <textarea id="apptHealthIssue" rows="2" placeholder="Describe symptoms..." required>High fever and headache for 2 days</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select District (Select or Type Manually)</label>
+                        <input list="districtList" id="apptDistrictSelect" placeholder="Select or type district..." value="Chennai" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Hospital (Select or Type Manually)</label>
+                        <input list="hospitalList" id="apptHospitalSelect" placeholder="Select or type hospital..." value="Rajiv Gandhi Govt General Hospital (RGGGH), Chennai" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Doctor Specialist (Select or Type Manually)</label>
+                        <input list="doctorList" id="apptDoctorSelect" placeholder="Select or type doctor specialist..." value="Dr. E. Theranirajan — Pediatrics" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Preferred Date & Time Slot</label>
+                        <input type="datetime-local" id="apptDateTime" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn primary-btn"><i class="fa-solid fa-bolt"></i> RUN AI SCHEDULER & GENERATE QR TOKEN</button>
+                    </div>
+                </form>
+
+                <div id="apptResultBox" class="result-box hidden"></div>
+            </div>
+        </section>
+
+        <!-- TAB: DIGITAL QR TOKEN SECTION -->
+        <section id="tab-tokens" class="tab-page">
+            <div class="grid-2col">
+                <div class="card text-center">
+                    <h2><i class="fa-solid fa-qrcode"></i> Patient Digital QR Token Card</h2>
+                    <p class="subtitle">Show this QR code at hospital reception to bypass waiting time!</p>
+
+                    <div class="token-display-box">
+                        <div class="token-number-badge" id="tokenCardNum">TOKEN #A-14</div>
+                        <div id="qrcodeCanvas" class="qr-code-wrapper" style="display:flex; justify-content:center; padding:12px; background:#fff; border-radius:12px; margin:16px auto; width:180px; height:180px;"></div>
+                        <div class="token-details" id="tokenCardDetails">
+                            <strong>Status: Ready for QR Scan</strong><br>
+                            Hospital: RGGGH Chennai (Pediatrics OPD)<br>
+                            Status: <span class="tag green">Ready for QR Scan</span>
+                        </div>
+                    </div>
+
+                    <button class="btn success-btn" onclick="simulateStaffScan()"><i class="fa-solid fa-expand"></i> SIMULATE RECEPTION QR CODE SCAN</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-users-line"></i> Selected Hospital OPD Live Queue Status</h2>
+                        <span class="tag cyan">Live Sync</span>
+                    </div>
+
+                    <div class="queue-status-vertical">
+                        <div class="q-row serving">
+                            <i class="fa-solid fa-user-doctor"></i>
+                            <div>
+                                <strong style="color:var(--green);">CURRENTLY SERVING INSIDE OPD ROOM:</strong>
+                                <h3 id="qServingText">Token #A-12 — Vignesh S</h3>
+                            </div>
+                        </div>
+
+                        <div class="q-row next">
+                            <i class="fa-solid fa-user-clock"></i>
+                            <div>
+                                <strong style="color:var(--amber);">NEXT PATIENT UP:</strong>
+                                <h3 id="qNextText">Token #A-13 — Tamilventhan M</h3>
+                            </div>
+                        </div>
+
+                        <div class="q-row queued">
+                            <i class="fa-solid fa-list"></i>
+                            <div>
+                                <strong>YOUR ASSIGNED TOKEN IN QUEUE:</strong>
+                                <h3 id="qYourText" style="color:var(--cyan);">Token #A-14 — Patient</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: VITAMIND MEDICAL STORE -->
+        <section id="tab-store" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-store"></i> VITAMIND Pharmacy & Medical Store (PharmEasy Home Delivery)</h2>
+                    <span class="tag green"><i class="fa-solid fa-truck"></i> Express Doorstep Delivery</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="patStoreSearchInput" placeholder="Search medicines by name (Dolo, Paracetamol, BP Monitor), category, or health issue...">
+                </div>
+
+                <div class="products-grid" id="storeProductsContainer"></div>
+            </div>
+        </section>
+
+        <!-- TAB: PATIENT ONBOARDING & KYC -->
+        <section id="tab-kyc" class="tab-page">
+            <div class="card form-card">
+                <h2><i class="fa-solid fa-id-card"></i> Patient Onboarding & KYC Document Verification</h2>
+                <form id="kycForm" class="grid-form">
+                    <div class="form-group">
+                        <label>Aadhaar Card Number</label>
+                        <input type="text" id="kycAadhaar" placeholder="1234 - 5678 - 9012" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>CMCHIS Health Card No (Optional)</label>
+                        <input type="text" id="kycCmchis" placeholder="TN-CMCHIS-88392">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Attach Aadhaar / ID Proof Document</label>
+                        <input type="file" id="kycProofFile" accept="*/*">
+                    </div>
+
+                    <div class="form-group">
+                        <label>District Resident (Select or Type Manually)</label>
+                        <input list="districtList" id="kycDistrict" placeholder="Select or type district..." value="Chennai">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn success-btn"><i class="fa-solid fa-shield-check"></i> VERIFY KYC PROOF & ONBOARD</button>
+                    </div>
+                </form>
+
+                <div id="kycResultBox" class="result-box hidden"></div>
+            </div>
+        </section>
+
+        <!-- TAB: CMCHIS & INSURANCE CLAIMS -->
+        <section id="tab-claims" class="tab-page">
+            <div class="card form-card">
+                <h2><i class="fa-solid fa-file-invoice-dollar"></i> CMCHIS & Insurance Claims Autonomous Validator</h2>
+                <form id="claimsForm" class="grid-form">
+                    <div class="form-group">
+                        <label>Insurance / CMCHIS Policy No</label>
+                        <input type="text" id="claimPolicyNo" placeholder="TN-CMCHIS-99201" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hospital Bill Amount (₹)</label>
+                        <input type="number" id="claimAmount" placeholder="150000" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn warning-btn"><i class="fa-solid fa-gears"></i> RUN CMCHIS AI CLAIMS VALIDATOR</button>
+                    </div>
+                </form>
+
+                <div id="claimsResultBox" class="result-box hidden"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- HOSPITAL DETAILS MODAL POPUP -->
+    <div id="hospitalModal" class="hospital-modal-backdrop hidden">
+        <div class="hospital-modal-card">
+            <button id="closeHospitalModalBtn" class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button>
+            <div id="hospitalModalContent"></div>
+        </div>
+    </div>
+
+    <!-- FLOATING 3D ROUND AI WIDGET ICON -->
+    <div id="floatingAiWidgetBtn" class="floating-ai-3d-btn" onclick="toggleAiChatDrawer()" title="Open 24/7 AI Health Assistant">
+        <div class="ai-3d-sphere">
+            <i class="fa-solid fa-robot"></i>
+        </div>
+        <span class="ai-pulse-dot"></span>
+        <span class="ai-badge-label">AI Health Assistant</span>
+    </div>
+
+    <!-- FLOATING GLASSMORPHIC CHAT DRAWER POPUP (OPEN BY DEFAULT) -->
+    <div id="floatingChatDrawer" class="floating-chat-drawer">
+        <div class="chat-drawer-header">
+            <div class="chat-header-title">
+                <div class="mini-bot-icon"><i class="fa-solid fa-robot"></i></div>
+                <div>
+                    <h3>VITAMIND Agentic AI Assistant</h3>
+                    <p class="chat-langs"><i class="fa-solid fa-language"></i> Tamil • English • Hindi Enabled</p>
+                </div>
+            </div>
+            <button id="closeChatDrawerBtn" class="close-chat-btn" onclick="document.getElementById('floatingChatDrawer').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="chat-drawer-body" id="chatMessages">
+            <div class="chat-msg bot">
+                <div class="msg-sender"><i class="fa-solid fa-robot"></i> VITAMIND AI Assistant</div>
+                <div class="msg-text">
+                    Vanakkam! Namaste! Hello! I am your 24/7 Multi-Lingual AI Assistant (Tamil / English / Hindi).<br><br>
+                    You can ask me medical queries, OR attach files (Images, Videos, Audios, Documents, PDFs, PPTs, Scanned copies), OR tell me to book appointments live!
+                </div>
+            </div>
+        </div>
+
+        <div id="chatFilePreview" class="chat-file-preview hidden"></div>
+
+        <div class="chat-drawer-footer">
+            <button class="btn-icon-chat" onclick="document.getElementById('chatFileInput').click()" title="Attach File">
+                <i class="fa-solid fa-paperclip"></i>
+            </button>
+            <input type="file" id="chatFileInput" accept="*/*" style="display:none;">
+
+            <input type="text" id="chatInput" placeholder="Ask query in Tamil/English/Hindi or attach files...">
+
+            <button id="sendChatBtn" class="btn primary-btn" style="padding:10px 14px;"><i class="fa-solid fa-paper-plane"></i></button>
+            <button id="voiceChatBtn" class="btn danger-btn" style="padding:10px 14px;"><i class="fa-solid fa-microphone"></i></button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

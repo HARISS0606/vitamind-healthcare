@@ -1,0 +1,122 @@
+{
+  "patients": [],
+  "doctors": [],
+  "staff": [],
+  "appointments": [
+    {
+      "id": 1,
+      "token": "A-12",
+      "name": "Vignesh S",
+      "phone": "+91 98401 22334",
+      "hospital": "Rajiv Gandhi Govt General Hospital (RGGGH), Chennai",
+      "doctor": "Dr. E. Theranirajan — Pediatrics",
+      "status": "INSIDE ROOM",
+      "date": "07 Aug 2026",
+      "symptoms": "High fever and throat infection"
+    },
+    {
+      "id": 2,
+      "token": "A-13",
+      "name": "Tamilventhan M",
+      "phone": "+91 97890 11223",
+      "hospital": "Rajiv Gandhi Govt General Hospital (RGGGH), Chennai",
+      "doctor": "Dr. E. Theranirajan — Pediatrics",
+      "status": "NEXT UP",
+      "date": "07 Aug 2026",
+      "symptoms": "Pediatric fever & cough"
+    },
+    {
+      "id": 3,
+      "token": "A-14",
+      "name": "Hariss Kumar K",
+      "phone": "+91 98765 43210",
+      "hospital": "Rajiv Gandhi Govt General Hospital (RGGGH), Chennai",
+      "doctor": "Dr. E. Theranirajan — Pediatrics",
+      "status": "WAITING",
+      "date": "07 Aug 2026",
+      "symptoms": "High fever, severe headache and joint pain for 2 days"
+    },
+    {
+      "name": "Hariss Kumar K",
+      "age": "24 Years",
+      "height": "172",
+      "weight": "68",
+      "temp": "98.6",
+      "allergies": "No Allergies",
+      "symptoms": "High fever",
+      "district": "Chennai",
+      "hospital": "Rajiv Gandhi Govt General Hospital (RGGGH), Chennai",
+      "doctor": "Dr. E. Theranirajan — Pediatrics",
+      "datetime": "Today 10:30 AM",
+      "id": 1786179041128,
+      "token": "A-17",
+      "status": "WAITING",
+      "date": "08/08/2026"
+    },
+    {
+      "name": "Ramesh",
+      "age": "24 Years",
+      "height": "172",
+      "weight": "68",
+      "temp": "98.6",
+      "allergies": "No Allergies",
+      "symptoms": "High fever",
+      "district": "Chennai",
+      "hospital": "Rajiv Gandhi Govt General Hospital (RGGGH), Chennai",
+      "doctor": "Dr. E. Theranirajan — Pediatrics",
+      "datetime": "Today 10:30 AM",
+      "id": 1786179103908,
+      "token": "A-18",
+      "status": "WAITING",
+      "date": "08/08/2026"
+    },
+    {
+      "name": "Ramesh",
+      "age": "24 Years",
+      "height": "172",
+      "weight": "68",
+      "temp": "98.6",
+      "allergies": "No Allergies",
+      "symptoms": "High fever",
+      "district": "Chennai",
+      "hospital": "Rajiv Gandhi Govt General Hospital (RGGGH), Chennai",
+      "doctor": "Dr. E. Theranirajan — Pediatrics",
+      "datetime": "Today 10:30 AM",
+      "id": 1786179175307,
+      "token": "A-19",
+      "status": "WAITING",
+      "date": "08/08/2026"
+    },
+    {
+      "name": "Ramesh",
+      "age": "24 Years",
+      "height": "172",
+      "weight": "68",
+      "temp": "98.6",
+      "allergies": "No Allergies",
+      "symptoms": "High fever",
+      "district": "Chennai",
+      "hospital": "Rajiv Gandhi Govt General Hospital (RGGGH), Chennai",
+      "doctor": "Dr. E. Theranirajan — Pediatrics",
+      "datetime": "Today 10:30 AM",
+      "id": 1786179201721,
+      "token": "A-20",
+      "status": "WAITING",
+      "date": "08/08/2026"
+    }
+  ],
+  "prescriptions": [
+    {
+      "id": 101,
+      "patient": "Hariss Kumar K",
+      "token": "Token #A-14",
+      "diagnosis": "Acute Viral Fever (Dengue Suspect)",
+      "medicines": "1. Tab Dolo 650mg — 1-0-1 (3 Days)\n2. Tab Cetirizine 10mg — 0-0-1 (3 Days)\n3. ORS Hydration Sachet — Daily 1L",
+      "advice": "Complete bed rest for 48 hours. Drink 3L fluids.",
+      "doctor": "Dr. E. Theranirajan, MD (Pediatrics Specialist)",
+      "date": "07 Aug 2026"
+    }
+  ],
+  "ambulances": [],
+  "bills": []
+}

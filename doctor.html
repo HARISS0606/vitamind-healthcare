@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VITAMIND — Doctor Clinical Command Station | Exclusive Hospital Access</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme doctor-sky-theme">
+
+    <!-- GLOBAL DATALISTS FOR DOCTOR PORTAL -->
+    <datalist id="hospitalList">
+        <option value="Rajiv Gandhi Govt General Hospital (RGGGH), Chennai"></option>
+        <option value="Coimbatore Medical College Hospital (CMCH), Coimbatore"></option>
+        <option value="Government Rajaji Hospital (GRH), Madurai"></option>
+        <option value="Stanley Medical College Hospital, Chennai"></option>
+        <option value="Kilpauk Medical College Hospital, Chennai"></option>
+        <option value="Apollo Super Specialty Hospital, Greams Road, Chennai"></option>
+        <option value="Christian Medical College (CMC), Vellore"></option>
+        <option value="MIOT International Hospital, Manapakkam, Chennai"></option>
+        <option value="PSG Hospitals, Peelamedu, Coimbatore"></option>
+    </datalist>
+
+    <datalist id="docDeptList">
+        <option value="Pediatrics & Child Health"></option>
+        <option value="Orthopedics & Spine Surgery"></option>
+        <option value="Cardiology & Critical Care"></option>
+        <option value="Diabetology & Endocrinology"></option>
+        <option value="General Medicine & Fever Clinic"></option>
+        <option value="Neurology & Neurosurgery"></option>
+        <option value="Obstetrics & Gynecology"></option>
+        <option value="Oncology & Radiation"></option>
+    </datalist>
+
+    <!-- DOCTOR EXCLUSIVE AUTHENTICATION & LICENSE REGISTRATION MODAL -->
+    <div id="doctorLoginModal" class="login-modal-overlay">
+        <div class="login-card shadow-2xl">
+            <div class="login-header">
+                <div class="login-brand-icon" style="background:linear-gradient(135deg, #38bdf8, #0284c7);"><i class="fa-solid fa-user-doctor" style="color:#fff;"></i></div>
+                <h2 id="docModalTitle">VITAM<span>IND</span> Doctor Clinical Station</h2>
+                <p id="docModalSubtitle">Exclusive Doctor Credentials & Hospital Access Login</p>
+            </div>
+
+            <!-- DOCTOR LOGIN VIEW -->
+            <div id="doctorLoginView">
+                <form id="doctorLoginForm" class="auth-body" style="display:flex; flex-direction:column; gap:14px;">
+                    <div class="form-group">
+                        <label>Hospital Name / Medical Authority (Select or Type Manually)</label>
+                        <input list="hospitalList" id="docLoginHospital" placeholder="Select or type hospital name..." value="Rajiv Gandhi Govt General Hospital (RGGGH), Chennai" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Doctor License ID / Username</label>
+                        <input type="text" id="docLoginUsername" placeholder="e.g. TN-PMC-48392 or dr.theranirajan" value="TN-PMC-48392" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="docLoginPassword" placeholder="••••••••" value="doctor123" required>
+                    </div>
+
+                    <button type="submit" class="btn success-btn full-width" style="background:linear-gradient(135deg, #38bdf8, #0284c7); color:#fff;">
+                        <i class="fa-solid fa-lock-open"></i> AUTHENTICATE & ACCESS CLINICAL OPD STATION
+                    </button>
+                </form>
+
+                <div style="margin-top:16px; text-align:center; border-top:1px solid var(--border); padding-top:14px;">
+                    <p style="font-size:12px; color:var(--text-muted);">New Consulting Doctor?</p>
+                    <button type="button" class="btn-sm cyan" style="margin-top:6px;" onclick="toggleDoctorAuthMode('register')">
+                        <i class="fa-solid fa-user-plus"></i> REGISTER NEW DOCTOR LICENSE & ACCOUNT
+                    </button>
+                </div>
+            </div>
+
+            <!-- DOCTOR REGISTRATION VIEW -->
+            <div id="doctorRegisterView" class="hidden">
+                <form id="createNewDoctorForm" class="grid-form">
+                    <div class="form-group full-width">
+                        <label>Select Affiliated Hospital (Select or Type Manually)</label>
+                        <input list="hospitalList" id="regDocHospital" placeholder="Select or type hospital..." value="Rajiv Gandhi Govt General Hospital (RGGGH), Chennai" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Doctor Full Name & Qualification</label>
+                        <input type="text" id="regDocName" placeholder="Dr. E. Theranirajan, MD" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Medical Council License ID</label>
+                        <input type="text" id="regDocLicense" placeholder="TN-PMC-99201" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Specialization Department (Select or Type Manually)</label>
+                        <input list="docDeptList" id="regDocDept" placeholder="Select or type department..." value="Pediatrics & Child Health" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Preferred Username</label>
+                        <input type="text" id="regDocUsername" placeholder="dr.theranirajan" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Create Account Password</label>
+                        <input type="password" id="regDocPassword" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn success-btn full-width" style="background:linear-gradient(135deg, #38bdf8, #0284c7); color:#fff;">
+                            <i class="fa-solid fa-id-badge"></i> REGISTER DOCTOR ACCOUNT & LOGIN
+                        </button>
+                    </div>
+                </form>
+
+                <div style="margin-top:14px; text-align:center; border-top:1px solid var(--border); padding-top:12px;">
+                    <p style="font-size:12px; color:var(--text-muted);">Already registered as Doctor?</p>
+                    <button type="button" class="btn-sm cyan" style="margin-top:6px;" onclick="toggleDoctorAuthMode('login')">
+                        <i class="fa-solid fa-right-to-bracket"></i> BACK TO DOCTOR LOGIN
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Doctor Portal Top Header -->
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-icon" style="background:linear-gradient(135deg, #38bdf8, #0284c7); box-shadow:0 0 25px rgba(56, 189, 248, 0.45);">
+                <i class="fa-solid fa-user-doctor" style="color:#fff;"></i>
+            </div>
+            <div>
+                <h1>VITAM<span>IND</span> <span class="state-tag" style="background:rgba(56, 189, 248, 0.15); color:#0284c7; border-color:#38bdf8;">DOCTOR CLINICAL PORTAL</span></h1>
+                <p>Doctor OPD Command Station & Diagnostic Intelligence Hub</p>
+            </div>
+        </div>
+
+        <div class="header-status-group">
+            <div class="user-profile-badge" style="border-color:#38bdf8;">
+                <i class="fa-solid fa-user-md" style="color:#0284c7;"></i>
+                <span id="docHeaderProfileName">Doctor Logged In: <strong>Dr. E. Theranirajan, MD</strong></span>
+                <button class="logout-sm-btn" onclick="logoutDoctor()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            </div>
+            <div class="status-badge live">🟢 OPD ROOM 4 ACTIVE</div>
+            <div class="clock-display" id="liveClock">07 Aug 2026 • 00:00:00</div>
+        </div>
+    </header>
+
+    <!-- REAL-TIME TOAST NOTIFICATION CONTAINER -->
+    <div id="toastNotificationContainer" class="toast-notification-container"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <button class="nav-btn active" data-tab="doc-dashboard">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>OPD Dashboard</span>
+        </button>
+
+        <button class="nav-btn tab-with-badge" data-tab="doc-notifications" id="navDocNotificationsTab">
+            <i class="fa-solid fa-bell"></i>
+            <span>Live Notifications</span>
+            <span class="tab-notif-badge" id="docNotifBadge">4</span>
+        </button>
+
+        <button class="nav-btn" data-tab="doc-saved-records">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>Saved Medical Records</span>
+        </button>
+
+        <button class="nav-btn" data-tab="doc-prev-prescriptions">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Previous Prescriptions</span>
+        </button>
+
+        <button class="nav-btn" data-tab="doc-scans">
+            <i class="fa-solid fa-x-ray"></i>
+            <span>Patient Scans</span>
+        </button>
+
+        <button class="nav-btn" data-tab="doc-reports">
+            <i class="fa-solid fa-vial-virus"></i>
+            <span>Patient Reports</span>
+        </button>
+
+        <button class="nav-btn" data-tab="doc-prescription">
+            <i class="fa-solid fa-file-prescription"></i>
+            <span>E-Prescription Tab</span>
+        </button>
+
+        <button class="nav-btn" data-tab="doc-med-news">
+            <i class="fa-solid fa-pills"></i>
+            <span>New Medicine Updates</span>
+        </button>
+
+        <button class="nav-btn" data-tab="doc-beds-hub">
+            <i class="fa-solid fa-bed-pulse"></i>
+            <span>Bed & Inpatient Hub</span>
+        </button>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="app-main">
+
+        <!-- TAB 1: DOCTOR OPD DASHBOARD -->
+        <section id="tab-doc-dashboard" class="tab-page active">
+            <div class="metrics-grid">
+                <div class="metric-card primary">
+                    <i class="fa-solid fa-hospital"></i>
+                    <div>
+                        <span class="val" id="docHospitalTitle">RGGGH Chennai</span>
+                        <span class="lbl">HOSPITAL: PEDIATRICS & GENERAL OPD</span>
+                    </div>
+                </div>
+
+                <div class="metric-card success">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <div>
+                        <span class="val" id="docPatientsConsulted">12 Patients</span>
+                        <span class="lbl">CONSULTED TODAY</span>
+                    </div>
+                </div>
+
+                <div class="metric-card warning">
+                    <i class="fa-solid fa-user-clock"></i>
+                    <div>
+                        <span class="val" id="docPatientsWaiting">3 Patients</span>
+                        <span class="lbl">WAITING IN OUTSIDE QUEUE</span>
+                    </div>
+                </div>
+
+                <div class="metric-card info">
+                    <i class="fa-solid fa-bed"></i>
+                    <div>
+                        <span class="val">42 Beds Free</span>
+                        <span class="lbl">HOSPITAL BED AVAILABILITY</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-status-grid-2col">
+                <div class="status-square-card appointment-status-card" style="border-top-color:#0284c7;">
+                    <div class="square-header">
+                        <div class="sq-icon green"><i class="fa-solid fa-id-card-clip"></i></div>
+                        <div>
+                            <h3>CURRENT PATIENT APPOINTMENT DETAILS</h3>
+                            <span class="tag green" id="patientStatusTag">IN CONSULTATION 🟢</span>
+                        </div>
+                    </div>
+
+                    <div class="square-body-grid">
+                        <div class="sq-info-item">
+                            <span class="sq-label">CURRENT TOKEN</span>
+                            <strong class="sq-val green-huge" id="currentInRoomToken">Token #A-14</strong>
+                        </div>
+
+                        <div class="sq-info-item">
+                            <span class="sq-label">PATIENT NAME & AGE</span>
+                            <strong class="sq-val gold" id="currentInRoomName">Hariss Kumar K (24 Yrs)</strong>
+                        </div>
+
+                        <div class="sq-info-item">
+                            <span class="sq-label">HEALTH METRICS & VITALS</span>
+                            <strong class="sq-val" id="currentInRoomVitals">Temp: 98.6°F | Weight: 68kg | Height: 172cm</strong>
+                        </div>
+
+                        <div class="sq-info-item">
+                            <span class="sq-label">KNOWN ALLERGIES</span>
+                            <strong class="sq-val red" id="currentInRoomAllergies">No Known Allergies</strong>
+                        </div>
+
+                        <div class="sq-info-item full-width" style="grid-column:1 / -1;">
+                            <span class="sq-label">REPORTED SYMPTOMS & REASON FOR VISIT</span>
+                            <strong class="sq-val cyan" id="currentInRoomSymptoms">High fever, headache, and body pain for 2 days</strong>
+                        </div>
+                    </div>
+
+                    <div class="square-footer" style="display:flex; gap:10px;">
+                        <button class="btn primary-btn full-width" onclick="switchToDocTab('doc-prescription')">
+                            <i class="fa-solid fa-file-prescription"></i> WRITE E-PRESCRIPTION FOR THIS PATIENT
+                        </button>
+                    </div>
+                </div>
+
+                <div class="status-square-card token-status-card">
+                    <div class="square-header">
+                        <div class="sq-icon amber"><i class="fa-solid fa-gears"></i></div>
+                        <div>
+                            <h3>TOKEN CHANGING & QUEUE CONTROLLER</h3>
+                            <span class="tag amber">OPD ROOM #4 CONTROLLER</span>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:12px;">
+                        <div style="background:#f0f9ff; border:1px solid #38bdf8; border-radius:12px; padding:14px; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <span style="font-size:10px; color:var(--text-muted); font-weight:800; display:block;">CURRENT ACTIVE TOKEN</span>
+                                <strong style="font-size:18px; color:var(--green);" id="activeTokenDisplay">#A-14 — Hariss Kumar K</strong>
+                            </div>
+                            <span class="tag green">Inside Doctor Room</span>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                            <button class="btn success-btn" onclick="callNextToken()">
+                                <i class="fa-solid fa-forward-step"></i> CALL NEXT TOKEN (#A-15)
+                            </button>
+
+                            <button class="btn warning-btn" onclick="skipToken()">
+                                <i class="fa-solid fa-forward"></i> SKIP CURRENT TOKEN
+                            </button>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                            <button class="btn danger-btn" onclick="triggerEmergencyCall()">
+                                <i class="fa-solid fa-triangle-exclamation"></i> EMERGENCY CALL
+                            </button>
+
+                            <button class="btn primary-btn" onclick="notifyReceptionQueue()">
+                                <i class="fa-solid fa-hospital-user"></i> SYNC WITH RECEPTION
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:10px;">
+                        <span class="sq-label" style="margin-bottom:6px; display:block;">LIVE WAITING QUEUE</span>
+                        <div id="docQueueListContainer" style="display:flex; flex-direction:column; gap:6px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top:20px;">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-paper-plane" style="color:#0284c7;"></i> Quick Prescription Writer</h3>
+                    <span class="tag green">Auto Routing Enabled</span>
+                </div>
+
+                <form id="quickPrescForm" class="grid-form">
+                    <div class="form-group">
+                        <label>Patient Name</label>
+                        <input type="text" id="quickPrescPatient" value="Hariss Kumar K" readonly style="background:#e0f2fe; color:#0284c7; font-weight:700;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Token Code</label>
+                        <input type="text" id="quickPrescToken" value="Token #A-14" readonly style="background:rgba(5,150,105,0.12); color:var(--green); font-weight:700;">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Prescribed Medicines & Dosage Instructions</label>
+                        <textarea id="quickPrescMedicines" rows="2" placeholder="e.g. Dolo 650mg 1-0-1 after food..." required>Dolo 650mg (1-0-1 after food for 3 days) + Pantop 40mg (1-0-0 before breakfast)</textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn success-btn full-width">
+                            <i class="fa-solid fa-paper-plane"></i> SEND PRESCRIPTION TO PATIENT PORTAL & RECEPTION
+                        </button>
+                    </div>
+                </form>
+                <div id="quickPrescResultBox" class="result-box hidden"></div>
+            </div>
+        </section>
+
+        <!-- TAB: DOCTOR LIVE NOTIFICATIONS -->
+        <section id="tab-doc-notifications" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-bell" style="color:#0284c7;"></i> Doctor Live Clinical Notifications & Emergency Alerts Center</h2>
+                    <span class="tag purple">Real-Time Clinical Feed</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="docNotifSearchInput" placeholder="Search hospital alerts, emergency calls, disease advisories, or drug updates...">
+                </div>
+
+                <div class="records-grid" id="docNotifListContainer"></div>
+            </div>
+        </section>
+
+        <!-- TAB: PREVIOUS PRESCRIPTIONS TAB -->
+        <section id="tab-doc-prev-prescriptions" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-clock-rotate-left" style="color:#0284c7;"></i> Patient Uploaded Previous Prescriptions & Medical History Vault</h2>
+                    <span class="tag green" id="prevPrescActivePatientTag">CURRENT PATIENT: Hariss Kumar K (Token #A-14)</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="docPrevPrescSearchInput" placeholder="Search previous prescriptions by medicine name (Dolo, Cetirizine), diagnosis, doctor, or date...">
+                </div>
+
+                <p class="subtitle">Inspect past medical prescriptions uploaded by the current patient from their patient portal for clinical history review.</p>
+
+                <div class="records-grid" id="docPrevPrescriptionsContainer"></div>
+            </div>
+        </section>
+
+        <!-- TAB: DIAGNOSTIC SCANS TAB -->
+        <section id="tab-doc-scans" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-x-ray" style="color:#0284c7;"></i> Diagnostic Medical Imaging Scans (MRI, CT, X-Ray, CD)</h2>
+                    <span class="tag cyan" id="scanActivePatientTag">CURRENT PATIENT: Hariss Kumar K (Token #A-14)</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="docScanSearchInput" placeholder="Search radiology scans by scan type (MRI, X-Ray, CT), body part, or DICOM ID...">
+                </div>
+
+                <div class="scans-grid-2col" id="docScansGridContainer">
+                    <div class="scan-card" data-scan-name="Chest X-Ray PA View Pulmonary DICOM">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <strong style="color:#0284c7; font-size:14px;"><i class="fa-solid fa-file-image"></i> Chest X-Ray (PA View) Scan</strong>
+                            <span class="tag green">DIGITAL DICOM LINKED</span>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=600&q=80" alt="Chest X-Ray" class="scan-preview-img">
+                        <div style="font-size:11px; color:var(--text-muted);">
+                            <strong>AI Radiology Impression:</strong> Clear lung fields bilaterally. No focal pulmonary consolidation.
+                        </div>
+                        <button class="btn-sm cyan" onclick="alert('Opening DICOM Viewer...')"><i class="fa-solid fa-expand"></i> Launch DICOM 3D Viewer</button>
+                    </div>
+
+                    <div class="scan-card" data-scan-name="Brain MRI Scan T1 T2 Weighted CD Scan">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <strong style="color:var(--purple); font-size:14px;"><i class="fa-solid fa-compact-disc"></i> Brain MRI Scan (T1/T2 Weighted)</strong>
+                            <span class="tag purple">CD SCAN ARCHIVE</span>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=600&q=80" alt="Brain MRI" class="scan-preview-img">
+                        <div style="font-size:11px; color:var(--text-muted);">
+                            <strong>AI Radiology Impression:</strong> Brain parenchyma unremarkable. No acute intracranial hemorrhage.
+                        </div>
+                        <button class="btn-sm cyan" onclick="alert('Opening MRI Slice Viewer...')"><i class="fa-solid fa-layer-group"></i> Inspect MRI Slices</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: PATHOLOGY & LAB REPORTS TAB -->
+        <section id="tab-doc-reports" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-vial-virus" style="color:var(--green);"></i> Pathology & Diagnostic Lab Test Reports</h2>
+                    <span class="tag green" id="reportActivePatientTag">CURRENT PATIENT: Hariss Kumar K (Token #A-14)</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="docReportSearchInput" placeholder="Search lab test parameters (CBC, Platelet, Dengue, Urine, Hemoglobin)...">
+                </div>
+
+                <div id="docReportsContainer">
+                    <div class="report-block" data-report-name="Complete Blood Count CBC Platelet Dengue NS1 Antigen" style="background:#ffffff; border:1px solid #38bdf8; border-radius:14px; padding:18px; margin-bottom:18px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(56,189,248,0.25); padding-bottom:10px;">
+                            <div>
+                                <strong style="font-size:15px; color:#0284c7;"><i class="fa-solid fa-droplet"></i> Complete Blood Count (CBC) & Dengue Serology Panel</strong>
+                                <div style="font-size:11px; color:var(--text-muted);">Sample Collected: 06 Aug 2026 • Lab Ref: #LAB-TN-99201</div>
+                            </div>
+                            <span class="tag amber">DENGUE NS1 AG POSITIVE ⚠️</span>
+                        </div>
+
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th>TEST PARAMETER</th>
+                                    <th>PATIENT VALUE</th>
+                                    <th>NORMAL REFERENCE RANGE</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Hemoglobin (Hb)</td>
+                                    <td>14.2 g/dL</td>
+                                    <td>13.0 – 17.0 g/dL</td>
+                                    <td><span class="tag green">NORMAL</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Total Platelet Count</td>
+                                    <td><strong style="color:var(--amber);">92,000 /mcL</strong></td>
+                                    <td>150,000 – 450,000 /mcL</td>
+                                    <td><span class="tag amber">LOW ⚠️</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Dengue NS1 Antigen Test</td>
+                                    <td><strong style="color:var(--red);">POSITIVE (+)</strong></td>
+                                    <td>Negative</td>
+                                    <td><span class="tag red">POSITIVE 🔴</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="report-block" data-report-name="Urine Routine Microscopic Examination Protein Glucose Pus Cells" style="background:#ffffff; border:1px solid #38bdf8; border-radius:14px; padding:18px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(56,189,248,0.25); padding-bottom:10px;">
+                            <div>
+                                <strong style="font-size:15px; color:#0284c7;"><i class="fa-solid fa-flask"></i> Urine Routine & Microscopic Examination</strong>
+                                <div style="font-size:11px; color:var(--text-muted);">Sample Collected: 06 Aug 2026 • Lab Ref: #LAB-TN-99202</div>
+                            </div>
+                            <span class="tag green">NORMAL</span>
+                        </div>
+
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th>EXAMINATION PARAMETER</th>
+                                    <th>PATIENT VALUE</th>
+                                    <th>REFERENCE STANDARD</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Urine Protein / Albumin</td>
+                                    <td>Nil / Negative</td>
+                                    <td>Nil</td>
+                                    <td><span class="tag green">NORMAL</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Pus Cells / WBCs</td>
+                                    <td>1-2 / HPF</td>
+                                    <td>0-5 / HPF</td>
+                                    <td><span class="tag green">NORMAL</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: DOCTOR E-PRESCRIPTION TAB -->
+        <section id="tab-doc-prescription" class="tab-page">
+            <div class="card form-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-file-prescription" style="color:#0284c7;"></i> E-Prescription Desk & Printable Prescription Generator</h2>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn-sm cyan" onclick="printPrescription()"><i class="fa-solid fa-print"></i> PRINT MANUAL PHYSICAL PRESCRIPTION</button>
+                    </div>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="docPrescSearchInput" placeholder="Search prescriptions by patient name, medication (Dolo, Cetirizine), diagnosis, or date...">
+                </div>
+
+                <div id="printablePrescriptionPaper" class="printable-prescription-paper">
+                    <div class="doc-letterhead-header">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <div>
+                                <h2 style="color:#0284c7; font-family:var(--font-head); font-size:22px; font-weight:900;">Dr. E. Theranirajan, MD</h2>
+                                <p style="font-size:12px; color:var(--text-muted);">Chief OPD Consultant & Pediatrics Specialist • Reg No: TN-PMC-48392</p>
+                                <p style="font-size:11px; color:#0284c7;" id="prescHospitalHeader">Rajiv Gandhi Govt General Hospital (RGGGH), Park Town, Chennai - 600003</p>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="font-family:var(--font-head); font-size:26px; font-weight:900; color:#0284c7;">Rx</div>
+                                <div style="font-size:11px; color:var(--text-muted);" id="prescDateStr">Date: 07 Aug 2026</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="fullPrescriptionForm" class="grid-form" style="margin-top:16px;">
+                        <div class="form-group">
+                            <label>Patient Full Name</label>
+                            <input type="text" id="fullPrescPatient" value="Hariss Kumar K" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Age / Gender / Token</label>
+                            <input type="text" id="fullPrescMeta" value="24 Years / Male / Token #A-14" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Clinical Diagnosis & ICD-10 Code</label>
+                            <input type="text" id="fullPrescDiagnosis" value="Acute Viral Fever (ICD-10 A90 Suspect Dengue / Seasonal Flu)" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Prescribed Medicines (Rx Dosage)</label>
+                            <textarea id="fullPrescMeds" rows="4" required>1. Tab Dolo 650mg — 1 Tablet (Morning - Evening after food for 3 days)&#10;2. Tab Cetirizine 10mg — 1 Tablet (Night before sleep for 3 days)&#10;3. Sachet ORS Hydration — 1 Sachet dissolved in 1L water daily</textarea>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Dietary & Clinical Advice</label>
+                            <textarea id="fullPrescAdvice" rows="2">Drink 3 Liters of fluid daily. Complete bed rest for 48 hours. Re-visit OPD if fever exceeds 102°F.</textarea>
+                        </div>
+
+                        <div class="form-group full-width" style="display:flex; gap:12px;">
+                            <button type="submit" class="btn success-btn" style="flex:1;">
+                                <i class="fa-solid fa-database"></i> SAVE TO PATIENT EMR & SYNC RECEPTION
+                            </button>
+
+                            <button type="button" class="btn primary-btn" onclick="printPrescription()">
+                                <i class="fa-solid fa-print"></i> PRINT PHYSICAL PRESCRIPTION
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="fullPrescResultBox" class="result-box hidden"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: NEW MEDICINE UPDATES FEED -->
+        <section id="tab-doc-med-news" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-pills" style="color:var(--amber);"></i> DCGI & FDA New Approved Medicines Feed</h2>
+                    <span class="tag amber"><i class="fa-solid fa-rotate"></i> Real-Time Drug Feed</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="docMedSearchInput" placeholder="Search new medicines by drug name (Dengvaxia, Paxlovid), DCGI status, or category...">
+                </div>
+
+                <div class="products-grid" id="newMedicinesFeedContainer">
+                    <div class="product-card" data-drug-name="Dengvaxia Tv003 Dengue Vaccine Immunization DCGI">
+                        <span class="tag green">DCGI APPROVED 2026</span>
+                        <div class="product-title" style="margin-top:6px;">Dengvaxia & Tv003 Dengue Vaccine</div>
+                        <div style="font-size:11px; color:var(--text-muted);">Therapeutic Category: Monovalent & Quadrivalent Dengue Immunization</div>
+                        <div style="font-size:12px; color:var(--text); line-height:1.5; margin-top:6px;">Approved for single-dose subcutaneous administration in high-endemic districts across Tamil Nadu.</div>
+                        <span class="slide-date" style="margin-top:auto;"><i class="fa-solid fa-clock"></i> Approved: Aug 2026</span>
+                    </div>
+
+                    <div class="product-card" data-drug-name="Paxlovid Nirmatrelvir Ritonavir Antiviral Oral Respiratory DCGI">
+                        <span class="tag cyan">NEW FORMULATION</span>
+                        <div class="product-title" style="margin-top:6px;">Paxlovid (Nirmatrelvir + Ritonavir)</div>
+                        <div style="font-size:11px; color:var(--text-muted);">Therapeutic Category: Oral Antiviral for Respiratory Outbreaks</div>
+                        <div style="font-size:12px; color:var(--text); line-height:1.5; margin-top:6px;">Fast-track DCGI authorization for adult patients with high-risk viral influenza & respiratory distress.</div>
+                        <span class="slide-date" style="margin-top:auto;"><i class="fa-solid fa-clock"></i> Approved: Jul 2026</span>
+                    </div>
+
+                    <div class="product-card" data-drug-name="Paracetamol Extended Release Analgesic Antipyretic Fever">
+                        <span class="tag amber">ALERT & REVISED DOSAGE</span>
+                        <div class="product-title" style="margin-top:6px;">Paracetamol Extended-Release 1000mg</div>
+                        <div style="font-size:11px; color:var(--text-muted);">Therapeutic Category: Analgesic & Antipyretic</div>
+                        <div style="font-size:12px; color:var(--text); line-height:1.5; margin-top:6px;">Revised daily maximum dosage capped at 3000mg per 24 hours for patients with hepatic monitoring.</div>
+                        <span class="slide-date" style="margin-top:auto;"><i class="fa-solid fa-clock"></i> Guideline Issued: Jun 2026</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: SAVED MEDICAL RECORDS IN DOCTOR PORTAL (PATIENT & DOCTOR VAULT) -->
+        <section id="tab-doc-saved-records" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-box-archive" style="color:#0284c7;"></i> Saved Medical Records Vault (Uploaded by Patients & Doctors)</h2>
+                    <span class="tag green" id="docSavedRecordsActiveTag"><i class="fa-solid fa-shield-check"></i> CURRENT PATIENT: Hariss Kumar K (Token #A-14)</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="docSavedRecordSearchInput" placeholder="Search saved medical records by document title, uploader (Patient / Doctor), diagnosis, lab, or date...">
+                </div>
+
+                <p class="subtitle">Access, preview, copy medications from, and manage all saved medical records uploaded by patients from home or issued by clinical doctors.</p>
+
+                <div class="records-grid" id="docSavedRecordsContainer"></div>
+            </div>
+        </section>
+
+        <!-- TAB: HOSPITAL BEDS & INPATIENT MONITORING HUB -->
+        <section id="tab-doc-beds-hub" class="tab-page">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-bed-pulse" style="color:var(--green);"></i> Hospital Bed Occupancy & Admitted Inpatient Monitoring Hub</h2>
+                    <span class="tag green">RGGGH Chennai Real-Time Sync</span>
+                </div>
+
+                <div class="tab-search-bar-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="docBedSearchInput" placeholder="Search admitted inpatients by name, ward no, bed no, or diagnosis (ICU, Dengue)...">
+                </div>
+
+                <div class="metrics-grid" style="margin-bottom:20px;">
+                    <div class="metric-card primary">
+                        <i class="fa-solid fa-bed"></i>
+                        <div>
+                            <span class="val">3,000 Beds</span>
+                            <span class="lbl">TOTAL HOSPITAL BED CAPACITY</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card warning">
+                        <i class="fa-solid fa-hospital-user"></i>
+                        <div>
+                            <span class="val">2,958 Beds</span>
+                            <span class="lbl">OCCUPIED INPATIENT BEDS</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card success">
+                        <i class="fa-solid fa-square-check"></i>
+                        <div>
+                            <span class="val">42 Beds Free</span>
+                            <span class="lbl">AVAILABLE VACANT BEDS</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card info">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                        <div>
+                            <span class="val">14 ICU Beds</span>
+                            <span class="lbl">AVAILABLE VENTILATOR ICU BEDS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="font-family:var(--font-head); font-size:15px; margin-bottom:12px; color:#0f172a;"><i class="fa-solid fa-procedures"></i> ADMITTED INPATIENTS MONITORING LIST</h3>
+
+                <div class="records-grid" id="inpatientMonitoringList">
+                    <div class="record-card inpatient-item" data-patient-name="Velmurugan Ward 12 Bed B-04 Dengue Recovering" style="align-items:center;">
+                        <div class="rec-icon"><i class="fa-solid fa-bed" style="color:var(--green);"></i></div>
+                        <div class="rec-info" style="flex:1;">
+                            <strong style="font-size:14px;">Inpatient: K. Velmurugan (Male, 54 Yrs) — Ward 12, Bed #B-04</strong>
+                            <p>Admitted: 04 Aug 2026 • Diagnosis: Dengue Hemorrhagic Fever • Status: <span class="tag green">STABLE & RECOVERING</span></p>
+                        </div>
+                        <button class="btn-sm cyan" onclick="alert('Viewing Vitals for K. Velmurugan: Temp 98.4°F, Platelet 145,000')"><i class="fa-solid fa-heart-pulse"></i> View Vitals</button>
+                    </div>
+
+                    <div class="record-card inpatient-item" data-patient-name="Lakshmi ICU Room 3 Bed ICU-02 H3N2 Respiratory Distress Observation" style="align-items:center;">
+                        <div class="rec-icon"><i class="fa-solid fa-user-ninja" style="color:var(--red);"></i></div>
+                        <div class="rec-info" style="flex:1;">
+                            <strong style="font-size:14px;">Inpatient: S. Lakshmi (Female, 62 Yrs) — ICU Room 3, Bed #ICU-02</strong>
+                            <p>Admitted: 06 Aug 2026 • Diagnosis: H3N2 Severe Respiratory Distress • Status: <span class="tag red">ICU OBSERVATION 🔴</span></p>
+                        </div>
+                        <button class="btn-sm cyan" onclick="alert('Viewing ICU Monitor for S. Lakshmi: SpO2 96%, Oxygen Flow Active')"><i class="fa-solid fa-heart-pulse"></i> View ICU Monitor</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FLOATING 3D ROUND AI CLINICAL ASSISTANT WIDGET FOR DOCTOR -->
+    <div id="docFloatingAiBtn" class="floating-ai-3d-btn" onclick="document.getElementById('docFloatingChatDrawer').classList.toggle('hidden')" title="Open AI Clinical Assistant">
+        <div class="ai-3d-sphere" style="background:radial-gradient(circle at 30% 30%, #38bdf8, #0284c7, #0f172a);">
+            <i class="fa-solid fa-brain"></i>
+        </div>
+        <span class="ai-pulse-dot"></span>
+        <span class="ai-badge-label">AI Clinical Assistant</span>
+    </div>
+
+    <!-- FLOATING GLASSMORPHIC CHAT DRAWER FOR DOCTOR AI (OPEN BY DEFAULT) -->
+    <div id="docFloatingChatDrawer" class="floating-chat-drawer">
+        <div class="chat-drawer-header">
+            <div class="chat-header-title">
+                <div class="mini-bot-icon" style="background:linear-gradient(135deg, #38bdf8, #0284c7);"><i class="fa-solid fa-brain"></i></div>
+                <div>
+                    <h3>VITAMIND Doctor AI Medical Assistant</h3>
+                    <p class="chat-langs"><i class="fa-solid fa-file-medical"></i> Multi-Media Patient Record Analyzer</p>
+                </div>
+            </div>
+            <button id="closeDocChatBtn" class="close-chat-btn" onclick="document.getElementById('docFloatingChatDrawer').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="chat-drawer-body" id="docChatMessages">
+            <div class="chat-msg bot">
+                <div class="msg-sender"><i class="fa-solid fa-brain"></i> AI Clinical Assistant</div>
+                <div class="msg-text">
+                    Greetings Doctor! I am your 24/7 AI Clinical Assistant.<br><br>
+                    Attach patient media files (<strong>Text, Images, Videos, Scanned Copies, Documents, PDFs</strong>) and I will analyze them to suggest treatment plans, dosage guidelines, and differential diagnoses!
+                </div>
+            </div>
+        </div>
+
+        <div id="docChatFilePreview" class="chat-file-preview hidden"></div>
+
+        <div class="chat-drawer-footer">
+            <button class="btn-icon-chat" onclick="document.getElementById('docChatFileInput').click()" title="Attach Patient Record / Scan / Image">
+                <i class="fa-solid fa-paperclip"></i>
+            </button>
+            <input type="file" id="docChatFileInput" accept="*/*" style="display:none;">
+
+            <input type="text" id="docChatInput" placeholder="Ask AI treatment ideas or upload records...">
+
+            <button id="sendDocChatBtn" class="btn primary-btn" style="padding:10px 14px;"><i class="fa-solid fa-paper-plane"></i></button>
+            <button id="voiceDocChatBtn" class="btn danger-btn" style="padding:10px 14px;"><i class="fa-solid fa-microphone"></i></button>
+        </div>
+    </div>
+
+    <script src="doctor-app.js"></script>
+</body>
+</html>
