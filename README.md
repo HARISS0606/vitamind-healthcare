@@ -7,12 +7,14 @@
 
 ---
 
-## 🌐 Live Application & Resources
+## 🌐 Live Application Portals for Hackathon Evaluation
 
-* 🚀 **Live GitHub Pages Web Application:** [https://hariss0606.github.io/vitamind-healthcare/](https://hariss0606.github.io/vitamind-healthcare/)
-* 📄 **Official PRISM Idea Presentation PDF:** [`HACKERZ_PRISM_Presentation.pdf`](./HACKERZ_PRISM_Presentation.pdf)
-* 📡 **Production Express Backend Server:** `http://127.0.0.1:3000`
-* 🔌 **Real-Time WebSocket Server:** `ws://127.0.0.1:3000/ws`
+* 👤 **Patient Health Portal:** [https://hariss0606.github.io/vitamind-healthcare/index.html](https://hariss0606.github.io/vitamind-healthcare/index.html)
+* 👨‍⚕️ **Doctor Clinical Portal:** [https://hariss0606.github.io/vitamind-healthcare/doctor.html](https://hariss0606.github.io/vitamind-healthcare/doctor.html)
+* 🏥 **Hospital Reception Console:** [https://hariss0606.github.io/vitamind-healthcare/reception.html](https://hariss0606.github.io/vitamind-healthcare/reception.html)
+* 📄 **Official PRISM Presentation PDF:** [`HACKERZ_PRISM_Presentation.pdf`](./HACKERZ_PRISM_Presentation.pdf)
+* 📡 **Production Express Server:** `http://127.0.0.1:3000`
+* 🔌 **WebSocket Real-Time Server:** `ws://127.0.0.1:3000/ws`
 
 ---
 
